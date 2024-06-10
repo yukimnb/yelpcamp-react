@@ -1,18 +1,19 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-export const Index = () => {
+export const TopPage = () => {
   return (
     <>
-      <Body className="text-center text-white bg-dark">
-        <Container className="d-flex h-100 p-3 mx-auto flex-column">
+      <StyledBody className="text-center text-white bg-dark">
+        <StyledContainer className="d-flex h-100 p-3 mx-auto flex-column">
           <header className="mb-auto">
             <h3 className="float-sm-start  mb-sm-5">YelpCamp</h3>
 
-            <Nav className=" float-sm-end mt-1">
+            <StyledNav className=" float-sm-end mt-1">
               <a href="{% url 'account_login' %}">ログイン</a>
               {/* <a href="{% url 'account_logout' %}">ログアウト</a> */}
               <a href="{% url 'account_signup' %}">ユーザー登録</a>
-            </Nav>
+            </StyledNav>
           </header>
           <main className="px-3">
             <h1>YelpCamp</h1>
@@ -23,22 +24,20 @@ export const Index = () => {
               <br />
               キャンプ場の登録やレビューをして交流を深めていきましょう！
             </p>
-            <Link
-              href="{% url 'campgrounds:list' %}"
-              className="btn btn-lg btn-secondary fw-bold border-white bg-white">
+            <StyledLink to="/campgrounds" className="btn btn-lg btn-secondary fw-bold border-white bg-white">
               キャンプ場へ
-            </Link>
+            </StyledLink>
           </main>
           <footer className="mt-auto text-white-50">
             <p>&copy;YelpCamp 2024</p>
           </footer>
-        </Container>
-      </Body>
+        </StyledContainer>
+      </StyledBody>
     </>
   );
 };
 
-export const Body = styled.div`
+export const StyledBody = styled.div`
   height: 100vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(src/assets/index.jpg);
   background-size: cover;
@@ -47,11 +46,11 @@ export const Body = styled.div`
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
 `;
 
-export const Container = styled.div`
+export const StyledContainer = styled.div`
   max-width: 80vw;
 `;
 
-export const Nav = styled.nav`
+export const StyledNav = styled.nav`
   a {
     padding: 0.25rem 0;
     font-weight: 700;
@@ -66,7 +65,7 @@ export const Nav = styled.nav`
   }
 `;
 
-export const Link = styled.a`
+export const StyledLink = styled(Link)`
   color: #333;
   text-shadow: none;
   &:hover {

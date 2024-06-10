@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { StyledGlobal } from "./components/StyledGlobal.jsx";
-import { Index } from "./components/Index.jsx";
+import { RouterProvider } from "react-router-dom";
+import { StyledGlobal } from "./components/StyledGlobal";
+import { routesBasic } from "./routes/routesBasic";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <StyledGlobal />
-    <Index />
+    <RouterProvider router={routesBasic} />
   </React.StrictMode>
 );
