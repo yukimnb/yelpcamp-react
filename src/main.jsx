@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "./App.jsx";
+import { StyledGlobal } from "./components/StyledGlobal.jsx";
+import { Index } from "./components/Index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <StyledGlobal />
+    <Index />
   </React.StrictMode>
 );
