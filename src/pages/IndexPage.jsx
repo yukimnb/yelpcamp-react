@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export const TopPage = () => {
+export const IndexPage = () => {
   return (
     <>
       <StyledBody className="text-center text-white bg-dark">

@@ -26,3 +26,4 @@ dist-ssr
 # self
 *.code-workspace
 README.md
+.env
