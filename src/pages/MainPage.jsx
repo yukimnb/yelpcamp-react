@@ -1,6 +1,6 @@
 import { Footer } from "../components/Footer";
 import { NavBar } from "../components/NavBar";
-import { ListPage } from "./ListPage";
+import { Outlet } from "react-router-dom";
 
 export const MainPage = () => {
   return (
@@ -8,7 +8,7 @@ export const MainPage = () => {
       <div className="d-flex flex-column vh-100">
         <NavBar />
         <main className="container mt-5">
-          <ListPage />
+          <Outlet />
         </main>
         <Footer />
       </div>

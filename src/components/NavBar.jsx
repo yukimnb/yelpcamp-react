@@ -19,23 +19,19 @@ export const NavBar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-link" href="{% url 'campgrounds:list' %}">
+            <Link to="/campgrounds" className="nav-link">
               キャンプ場一覧
-            </a>
-            <a className="nav-link" href="{% url 'campgrounds:create' %}">
+            </Link>
+            <Link to="/campgrounds/create" className="nav-link">
               キャンプ場作成
-            </a>
+            </Link>
           </div>
           <div className="navbar-nav ms-auto">
-            <a className="nav-link" href="{% url 'account_logout' %}">
-              ログアウト
-            </a>
-            <a className="nav-link" href="{% url 'account_login' %}">
+            <Link className="nav-link">ログアウト</Link>
+            <Link to="/campgrounds/login" className="nav-link">
               ログイン
-            </a>
-            <a className="nav-link" href="{% url 'account_signup' %}">
-              ユーザー登録
-            </a>
+            </Link>
+            <Link className="nav-link">ユーザー登録</Link>
           </div>
         </div>
         <span className="badge rounded-pill text-bg-warning ms-2">username</span>
