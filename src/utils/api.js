@@ -16,3 +16,8 @@ export const userLogin = async (data) => {
   const res = await axios.post(ENDPOINT_URL + "accounts/login/", data);
   return res.data;
 };
+
+export const userLogout = async () => {
+  const res = await axios.post(ENDPOINT_URL + "accounts/logout/");
+  return res.status;
+};

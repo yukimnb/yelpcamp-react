@@ -1,11 +1,15 @@
 import { useState, createContext } from "react";
 import PropTypes from "prop-types";
 
-export const TokenContext = createContext();
+export const AppContext = createContext();
 
 export const ContextProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
-  return <TokenContext.Provider value={[token, setToken]}>{children}</TokenContext.Provider>;
+  const [context, setContext] = useState(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    return userInfo !== null ? userInfo : {};
+  });
+
+  return <AppContext.Provider value={[context, setContext]}>{children}</AppContext.Provider>;
 };
 
 ContextProvider.propTypes = {

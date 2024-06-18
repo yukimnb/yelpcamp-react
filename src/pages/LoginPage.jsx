@@ -2,33 +2,36 @@ import { useState, useContext } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { userLogin } from "../utils/api";
-import { TokenContext } from "../components/ContextProvider";
+import { AppContext } from "../components/ContextProvider";
 
 export const LoginPage = () => {
-  const [, setToken] = useContext(TokenContext);
+  const [, setContext] = useContext(AppContext);
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
   const [validated, setValidated] = useState(false);
-
   const mutation = useMutation(userLogin);
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     } else {
-      event.preventDefault();
       mutation.mutate(formValues, {
-        onSuccess: (data) => {
-          console.log(data);
-          setToken(data.key);
+        onSuccess: (data, context) => {
+          const [username] = context.email.match(/^[\w-]+/);
+          const userInfo = {
+            key: data.key,
+            user: username,
+          };
+          setContext(userInfo);
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
           navigate("/campgrounds");
         },
-        // もう少し詳細なエラーハンドリングを行う
+        // TODO: もう少し詳細なエラーハンドリングを行う
         onError: (error) => {
           console.log("Error", error);
         },
