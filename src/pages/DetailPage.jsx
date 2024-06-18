@@ -5,7 +5,6 @@ import { getCampgroundDetail } from "../utils/api";
 export const DetailPage = () => {
   const { id } = useParams();
   const { data, error, isLoading, isError } = useQuery("detail", () => getCampgroundDetail(id));
-  console.log(data);
   if (isLoading) {
     return <p>Loading...</p>;
   }
