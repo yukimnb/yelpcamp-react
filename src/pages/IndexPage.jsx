@@ -1,22 +1,43 @@
+import { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../components/ContextProvider";
+import { userLogout } from "../utils/api";
 
 export const IndexPage = () => {
+  const [context, setContext] = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const statusCode = await userLogout();
+    if (statusCode === 200) {
+      setContext({});
+      localStorage.removeItem("userInfo");
+      navigate("/");
+    } else {
+      // TODO: もう少し詳細なエラーハンドリングを行う
+      console.log("ログアウトに失敗しました");
+    }
+  };
+
   return (
     <>
       <StyledBody className="text-center text-white bg-dark">
         <StyledContainer className="d-flex h-100 p-3 mx-auto flex-column">
           <header className="mb-auto">
             <h3 className="float-sm-start  mb-sm-5">YelpCamp</h3>
-
-            <StyledNav className=" float-sm-end mt-1">
-              <a href="{% url 'account_login' %}">ログイン</a>
-              {/* <a href="{% url 'account_logout' %}">ログアウト</a> */}
-              <a href="{% url 'account_signup' %}">ユーザー登録</a>
-            </StyledNav>
+            <nav className=" float-sm-end mt-1">
+              {context.key ? (
+                <NavLink onClick={handleLogout}>ログアウト</NavLink>
+              ) : (
+                <>
+                  <NavLink to="/campgrounds/login">ログイン</NavLink>
+                  <NavLink to="/campgrounds/singup">ユーザー登録</NavLink>
+                </>
+              )}
+            </nav>
           </header>
           <main className="px-3">
-            <h1>YelpCamp</h1>
             <p className="lead">
               YelpCampへようこそ！
               <br />
@@ -50,15 +71,13 @@ export const StyledContainer = styled.div`
   max-width: 80vw;
 `;
 
-export const StyledNav = styled.nav`
-  a {
-    padding: 0.25rem 0;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
-    margin: 0 0.5rem;
-    border-bottom: 0.25rem solid transparent;
-    text-align: center;
-  }
+export const NavLink = styled(Link)`
+  padding: 0.25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0.5rem;
+  border-bottom: 0.25rem solid transparent;
+  text-align: center;
   a:hover {
     color: rgba(255, 255, 255, 0.5);
     border-bottom: 0.25rem solid rgba(255, 255, 255, 0.5);

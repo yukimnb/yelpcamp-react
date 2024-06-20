@@ -48,15 +48,17 @@ export const NavBar = () => {
           </div>
           <div className="navbar-nav ms-auto">
             {context.key ? (
-              <button className="nav-link" onClick={handleLogout}>
+              <Link className="nav-link" onClick={handleLogout}>
                 ログアウト
-              </button>
+              </Link>
             ) : (
               <>
                 <Link to="/campgrounds/login" className="nav-link">
                   ログイン
                 </Link>
-                <Link className="nav-link">ユーザー登録</Link>
+                <Link to="/campgrounds/signup" className="nav-link">
+                  ユーザー登録
+                </Link>
               </>
             )}
           </div>

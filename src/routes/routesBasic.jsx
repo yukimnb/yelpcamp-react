@@ -4,8 +4,10 @@ import { IndexPage } from "../pages/IndexPage";
 import { MainPage } from "../pages/MainPage";
 import { ListPage } from "../pages/ListPage";
 import { DetailPage } from "../pages/DetailPage";
-import { LoginPage } from "../pages/LoginPage";
 import { CreatePage } from "../pages/CreatePage";
+import { SignUpPage } from "../pages/SignUpPage";
+import { LoginPage } from "../pages/LoginPage";
+
 export const routesBasic = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -14,6 +16,7 @@ export const routesBasic = createBrowserRouter(
         <Route path="" element={<ListPage />} />
         <Route path=":id" element={<DetailPage />} />
         <Route path="create" element={<CreatePage />} />
+        <Route path="signup" element={<SignUpPage />} />
         <Route path="login" element={<LoginPage />} />
       </Route>
     </>
