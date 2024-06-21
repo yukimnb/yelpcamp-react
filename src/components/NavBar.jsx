@@ -63,7 +63,7 @@ export const NavBar = () => {
             )}
           </div>
         </div>
-        {context.key && <span className="badge rounded-pill text-bg-warning ms-2">{context.user}</span>}
+        {context.key && <span className="badge rounded-pill text-bg-warning mx-2">{context.userName}</span>}
       </div>
     </nav>
   );

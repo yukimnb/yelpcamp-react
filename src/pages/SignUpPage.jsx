@@ -30,11 +30,11 @@ export const SignUpPage = () => {
         {
           onSuccess: () => {
             loginMutation.mutate(formValues, {
-              onSuccess: (data, context) => {
-                const [username] = context.email.match(/^[\w-]+/);
+              onSuccess: (data) => {
                 const userInfo = {
                   key: data.key,
-                  user: username,
+                  userId: data.id,
+                  userName: data.name,
                 };
                 setContext(userInfo);
                 localStorage.setItem("userInfo", JSON.stringify(userInfo));

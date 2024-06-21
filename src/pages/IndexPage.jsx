@@ -32,7 +32,7 @@ export const IndexPage = () => {
               ) : (
                 <>
                   <NavLink to="/campgrounds/login">ログイン</NavLink>
-                  <NavLink to="/campgrounds/singup">ユーザー登録</NavLink>
+                  <NavLink to="/campgrounds/signup">ユーザー登録</NavLink>
                 </>
               )}
             </nav>
