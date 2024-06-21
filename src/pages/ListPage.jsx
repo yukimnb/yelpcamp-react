@@ -1,10 +1,11 @@
 import { useQuery } from "react-query";
 import { getCampgroundsList } from "../utils/api";
 import { Link } from "react-router-dom";
+import { ClusterMap } from "../components/ClusterMap";
 
 export const ListPage = () => {
-  const { data, error, isLoading, isError } = useQuery("list", getCampgroundsList);
-
+  const { data, error, isLoading, isError, isSuccess } = useQuery("list", getCampgroundsList);
+  let newData = [];
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -13,11 +14,17 @@ export const ListPage = () => {
     return <p>Error: {error.message}</p>;
   }
 
+  if (isSuccess) {
+    newData = data.map((object) => {
+      object.properties = { title: object.title };
+      return object;
+    });
+  }
+
   return (
     <>
-      <div id="cluster-map" className="mb-3"></div>
+      <ClusterMap newData={newData} />
       <h1>キャンプ場一覧</h1>
-      {/* 取得データをfor文で展開する */}
       {data &&
         data.map((object) => (
           <div className="card mb-3" key={object.title}>
@@ -40,11 +47,6 @@ export const ListPage = () => {
             </div>
           </div>
         ))}
-      {/* スクリプトを埋め込む */}
-      {/* <script>
-    const mapboxToken = "{{ mapbox_token }}";
-    const campgroundsJson = {{ campgrounds_json|safe }}; </script>
-    <script src="{% static 'js/clusterMap.js' %}"></script> */}
     </>
   );
 };
