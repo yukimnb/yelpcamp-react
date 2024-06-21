@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getCampgroundDetail } from "../utils/api";
+import { Map } from "../components/Map";
 
 export const DetailPage = () => {
   const { id } = useParams();
@@ -78,9 +79,9 @@ export const DetailPage = () => {
             </div>
           </div>
         </div>
-        {/* <div className="col-md-5">
-      <div id="map"></div>
-      {% if reviews %}
+        <div className="col-md-5">
+          <Map geometry={data.geometry} location={data.location} />
+          {/* {% if reviews %}
         <h3 className="mt-4 mb-2">レビュー</h3>
         {% for review in reviews %}
           <div className="card mb-3">
@@ -101,16 +102,8 @@ export const DetailPage = () => {
         {% endfor %}
       </div>
     {% endif %} */}
+        </div>
       </div>
-
-      {/* {% block scripts %} */}
-      {/* <script> */}
-      {/* const mapboxToken = "{{ mapbox_token }}"; */}
-      {/* const place = "{{ campground.location }}"; */}
-      {/* const geometry = {{ campground.geometry|safe }}; */}
-      {/* </script> */}
-      {/* <script src="{% static 'js/mapbox.js' %}"></script> */}
-      {/* {% endblock scripts %} */}
     </>
   );
 };
