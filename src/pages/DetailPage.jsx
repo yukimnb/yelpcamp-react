@@ -1,17 +1,34 @@
-import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { getCampgroundDetail } from "../utils/api";
+import { useContext } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
+import { getCampgroundDetail, deleteCampground } from "../utils/api";
 import { Map } from "../components/Map";
+import { AppContext } from "../components/ContextProvider";
 
 export const DetailPage = () => {
   const { id } = useParams();
   const { data, error, isLoading, isError } = useQuery("detail", () => getCampgroundDetail(id));
+  const deleteMutation = useMutation(deleteCampground);
+  const [context] = useContext(AppContext);
+  const navigate = useNavigate();
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
   if (isError) {
     return <p>Error: {error.message}</p>;
   }
+
+  const handleDelete = () => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        navigate("/campgrounds");
+      },
+      onError: (error) => {
+        console.log("Error", error);
+      },
+    });
+  };
 
   return (
     <>
@@ -64,19 +81,25 @@ export const DetailPage = () => {
               <li className="list-group-item">登録者：{data.author_name}</li>
               <li className="list-group-item">&yen; {data.price} / 泊</li>
             </ul>
-            <div className="card-body">
-              {/* {% if user.username == author.username %} */}
-              <a className="btn btn-info" href="{% url 'campgrounds:edit' campground.id %}">
-                編集する
-              </a>
-              <a className="btn btn-danger" href="{% url 'campgrounds:delete' campground.id %}">
-                削除する
-              </a>
-              {/* {% endif %} */}
-              <a className="btn btn-success" href="{% url 'campgrounds:create_review' campground.id %}">
-                レビューを作成
-              </a>
-            </div>
+            {context.key && (
+              <>
+                <div className="card-body">
+                  {context.userName === data.author_name && (
+                    <>
+                      <Link to="" className="btn btn-info">
+                        編集する
+                      </Link>
+                      <button className="btn btn-danger" onClick={handleDelete}>
+                        削除する
+                      </button>
+                    </>
+                  )}
+                  <Link to="" className="btn btn-success">
+                    レビューを作成
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="col-md-5">

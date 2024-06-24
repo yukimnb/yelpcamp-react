@@ -21,6 +21,11 @@ export const createCampground = async (data) => {
   return res.status;
 };
 
+export const deleteCampground = async (id) => {
+  const res = await axios.delete(ENDPOINT_URL + `campgrounds/${id}/`);
+  return res.status;
+};
+
 export const userSignUp = async (data) => {
   const res = await axios.post(ENDPOINT_URL + "accounts/signup/", data);
   return res.status;
