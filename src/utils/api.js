@@ -21,6 +21,16 @@ export const createCampground = async (data) => {
   return res.status;
 };
 
+export const updateCampground = async ([id, data]) => {
+  console.log(id, Array.from(data.entries()));
+  const res = await axios.patch(ENDPOINT_URL + `campgrounds/${id}/`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.status;
+};
+
 export const deleteCampground = async (id) => {
   const res = await axios.delete(ENDPOINT_URL + `campgrounds/${id}/`);
   return res.status;

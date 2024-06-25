@@ -86,10 +86,10 @@ export const DetailPage = () => {
                 <div className="card-body">
                   {context.userName === data.author_name && (
                     <>
-                      <Link to="" className="btn btn-info">
+                      <Link to={`/campgrounds/${data.id}/edit`} className="btn btn-info me-2" state={data}>
                         編集する
                       </Link>
-                      <button className="btn btn-danger" onClick={handleDelete}>
+                      <button className="btn btn-danger me-2" onClick={handleDelete}>
                         削除する
                       </button>
                     </>

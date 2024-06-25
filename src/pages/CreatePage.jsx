@@ -56,12 +56,13 @@ export const CreatePage = () => {
   };
 
   const handleForm = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleImage = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.files[0] });
+    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }));
   };
+
   return (
     <>
       <div className="row">
@@ -130,47 +131,27 @@ export const CreatePage = () => {
                 onChange={handleForm}
                 required></textarea>
             </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="image1">
-                画像1
-              </label>
-              <input
-                className="form-control"
-                type="file"
-                name="image1"
-                id="image1"
-                accept="image/*"
-                onChange={handleImage}
-                required
-              />
-              <div className="invalid-feedback">キャンプ場の登録には1枚以上の画像が必要です</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="image2">
-                画像2
-              </label>
-              <input
-                className="form-control"
-                type="file"
-                name="image2"
-                id="image2"
-                accept="image/*"
-                onChange={handleImage}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="image3">
-                画像3
-              </label>
-              <input
-                className="form-control"
-                type="file"
-                name="image3"
-                id="image3"
-                accept="image/*"
-                onChange={handleImage}
-              />
-            </div>
+            {/* image要素 * 3作成 */}
+            {[...Array(3)].map((_, i) => {
+              const idx = i + 1;
+              return (
+                <div className="mb-3" key={idx}>
+                  <label className="form-label" htmlFor={`image${idx}`}>
+                    画像{idx}
+                  </label>
+                  <input
+                    className="form-control"
+                    type="file"
+                    name={`image${idx}`}
+                    id={`image${idx}`}
+                    accept="image/*"
+                    onChange={handleImage}
+                    required={idx === 1 && true}
+                  />
+                  {idx === 1 && <div className="invalid-feedback">キャンプ場の登録には1枚以上の画像が必要です</div>}
+                </div>
+              );
+            })}
             <div className="mb-3">
               <button className="btn btn-success">登録する</button>
             </div>
