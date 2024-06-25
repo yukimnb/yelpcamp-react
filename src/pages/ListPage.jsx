@@ -26,27 +26,29 @@ export const ListPage = () => {
       <ClusterMap newData={newData} />
       <h1>キャンプ場一覧</h1>
       {data &&
-        data.map((object) => (
-          <div className="card mb-3" key={object.title}>
-            <div className="row">
-              <div className="col-lg-4">
-                <img src={object.image1} alt="" className="w-100 h-100" />
-              </div>
-              <div className="col-md-8">
-                <div className="card-body">
-                  <h5 className="card-title">{object.title}</h5>
-                  <p className="card-text">{object.description}</p>
-                  <p className="card-text">
-                    <small className="text-muted">{object.location}</small>
-                  </p>
-                  <Link to={`/campgrounds/${object.id}`} className="btn btn-primary">
-                    {object.title}の詳細
-                  </Link>
+        data
+          .sort((a, b) => a.id - b.id)
+          .map((object) => (
+            <div className="card mb-3" key={object.title}>
+              <div className="row">
+                <div className="col-lg-4">
+                  <img src={object.image1} alt="" className="w-100 h-100" />
+                </div>
+                <div className="col-md-8">
+                  <div className="card-body">
+                    <h5 className="card-title">{object.title}</h5>
+                    <p className="card-text">{object.description}</p>
+                    <p className="card-text">
+                      <small className="text-muted">{object.location}</small>
+                    </p>
+                    <Link to={`/campgrounds/${object.id}`} className="btn btn-primary">
+                      {object.title}の詳細
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
     </>
   );
 };
