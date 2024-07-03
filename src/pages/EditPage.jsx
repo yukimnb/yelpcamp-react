@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { getForwardGeocoding, updateCampground } from "../utils/api";
@@ -84,12 +84,6 @@ export const EditPage = () => {
   const handleDeleteImage = (e) => {
     setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.checked ? "" : data[e.target.name] }));
   };
-
-  useEffect(() => {
-    console.log("Current formValues:", formValues);
-    console.log("###################");
-    console.log("Current newImages:", newImages);
-  }, [formValues, newImages]);
 
   return (
     <>

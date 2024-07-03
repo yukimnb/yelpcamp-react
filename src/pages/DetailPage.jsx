@@ -2,13 +2,17 @@ import { useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import { getCampgroundDetail, deleteCampground } from "../utils/api";
+import { getReview, deleteReview } from "../utils/reviewAPI";
 import { Map } from "../components/Map";
 import { AppContext } from "../components/ContextProvider";
+import "../assets/css/starability.css";
 
 export const DetailPage = () => {
   const { id } = useParams();
   const { data, error, isLoading, isError } = useQuery("detail", () => getCampgroundDetail(id));
+  const { data: reviews } = useQuery("reviews", () => getReview(id));
   const deleteMutation = useMutation(deleteCampground);
+  const deleteReviewMutation = useMutation(deleteReview);
   const [context] = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -23,6 +27,17 @@ export const DetailPage = () => {
     deleteMutation.mutate(id, {
       onSuccess: () => {
         navigate("/campgrounds");
+      },
+      onError: (error) => {
+        console.log("Error", error);
+      },
+    });
+  };
+
+  const handleDeleteReview = (reviewId) => {
+    deleteReviewMutation.mutate(reviewId, {
+      onSuccess: () => {
+        navigate(0);
       },
       onError: (error) => {
         console.log("Error", error);
@@ -94,7 +109,7 @@ export const DetailPage = () => {
                       </button>
                     </>
                   )}
-                  <Link to="" className="btn btn-success">
+                  <Link to={`/campgrounds/${data.id}/createreview`} className="btn btn-success">
                     レビューを作成
                   </Link>
                 </div>
@@ -104,27 +119,26 @@ export const DetailPage = () => {
         </div>
         <div className="col-md-5">
           <Map geometry={data.geometry} location={data.location} />
-          {/* {% if reviews %}
-        <h3 className="mt-4 mb-2">レビュー</h3>
-        {% for review in reviews %}
-          <div className="card mb-3">
-            <div className="card-body">
-              <h5 className="card-subtitle mb-2">{{ review.reviewer.username }}</h5>
-              <p className="card-title starability-result"
-                 data-rating="{{ review.rating }}">Rated: {{ review.rating }} stars</p>
-              <p className="card-text">コメント : {{ review.comment }}</p>
-              {% if user.id == review.reviewer_id %}
-                <form action="{% url 'campgrounds:delete_review' id=campground.id review_id=review.id %}"
-                      method="POST">
-                  {% csrf_token %}
-                  <button className="btn btn-sm btn-danger">削除する</button>
-                </form>
-              {% endif %}
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %} */}
+          {reviews && <h3 className="mt-4 mb-2">レビュー</h3>}
+          {reviews &&
+            reviews
+              .sort((a, b) => b.id - a.id)
+              .map((object) => (
+                <div className="card mb-3" key={object.id}>
+                  <div className="card-body">
+                    <h5 className="card-subtitle mb-2">{object.reviewer_name}</h5>
+                    <p className="card-title starability-result" data-rating={object.rating}>
+                      Rated: {object.rating} stars
+                    </p>
+                    <p className="card-text">コメント : {object.comment}</p>
+                    {context.userName === object.reviewer_name && (
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDeleteReview(object.id)}>
+                        削除する
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
     </>
