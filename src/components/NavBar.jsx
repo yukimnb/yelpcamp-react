@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AppContext } from "./ContextProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogout } from "../utils/userAPI";
+import { toast } from "react-toastify";
 
 export const NavBar = () => {
   const [context, setContext] = useContext(AppContext);
@@ -12,6 +13,7 @@ export const NavBar = () => {
     if (statusCode === 200) {
       setContext({});
       localStorage.removeItem("userInfo");
+      toast.success("ログアウトしました。");
       navigate("/");
     } else {
       // TODO: もう少し詳細なエラーハンドリングを行う

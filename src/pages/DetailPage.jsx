@@ -5,6 +5,7 @@ import { getCampgroundDetail, deleteCampground } from "../utils/campgroundAPI";
 import { getReview, deleteReview } from "../utils/reviewAPI";
 import { Map } from "../components/Map";
 import { AppContext } from "../components/ContextProvider";
+import { toast } from "react-toastify";
 
 export const DetailPage = () => {
   const { id } = useParams();
@@ -25,6 +26,7 @@ export const DetailPage = () => {
   const handleDelete = () => {
     deleteMutation.mutate(id, {
       onSuccess: () => {
+        toast.success("キャンプ場を削除しました");
         navigate("/campgrounds");
       },
       onError: (error) => {
@@ -36,6 +38,7 @@ export const DetailPage = () => {
   const handleDeleteReview = (reviewId) => {
     deleteReviewMutation.mutate(reviewId, {
       onSuccess: () => {
+        toast.success("レビューを削除しました");
         navigate(0);
       },
       onError: (error) => {

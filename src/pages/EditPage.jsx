@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { updateCampground } from "../utils/campgroundAPI";
 import { getForwardGeocoding } from "../utils/mapboxAPI";
+import { toast } from "react-toastify";
 
 export const EditPage = () => {
   const { id } = useParams();
@@ -48,6 +49,7 @@ export const EditPage = () => {
             formData.set("geometry", JSON.stringify(geometry));
             updateMutation.mutate([id, formData], {
               onSuccess: () => {
+                toast.success("キャンプ場を更新しました");
                 navigate(`/campgrounds/${id}`);
               },
               // TODO: もう少し詳細なエラーハンドリングを行う
@@ -64,6 +66,7 @@ export const EditPage = () => {
       } else {
         updateMutation.mutate([id, formData], {
           onSuccess: () => {
+            toast.success("キャンプ場を更新しました");
             navigate(`/campgrounds/${id}`);
           },
           // TODO: もう少し詳細なエラーハンドリングを行う

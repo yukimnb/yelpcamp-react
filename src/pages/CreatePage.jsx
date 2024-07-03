@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { createCampground } from "../utils/campgroundAPI";
 import { getForwardGeocoding } from "../utils/mapboxAPI";
 import { AppContext } from "../components/ContextProvider";
+import { toast } from "react-toastify";
 
 export const CreatePage = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ export const CreatePage = () => {
           formData.set("geometry", JSON.stringify(geometry));
           createMutation.mutate(formData, {
             onSuccess: () => {
+              toast.success("キャンプ場を作成しました");
               navigate("/campgrounds");
             },
             // TODO: もう少し詳細なエラーハンドリングを行う

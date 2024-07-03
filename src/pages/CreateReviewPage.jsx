@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { createReview } from "../utils/reviewAPI";
 import { AppContext } from "../components/ContextProvider";
+import { toast } from "react-toastify";
 
 export const CreateReviewPage = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export const CreateReviewPage = () => {
     } else {
       createMutation.mutate([id, formValues], {
         onSuccess: () => {
+          toast.success("レビューを作成しました");
           navigate(`/campgrounds/${id}`);
         },
         // TODO: もう少し詳細なエラーハンドリングを行う

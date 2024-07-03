@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { userLogin } from "../utils/userAPI";
 import { AppContext } from "../components/ContextProvider";
+import { toast } from "react-toastify";
 
 export const LoginPage = () => {
   const [, setContext] = useContext(AppContext);
@@ -29,6 +30,7 @@ export const LoginPage = () => {
           };
           setContext(userInfo);
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
+          toast.success(`${data.name} としてログインしました`);
           navigate("/campgrounds");
         },
         // TODO: もう少し詳細なエラーハンドリングを行う

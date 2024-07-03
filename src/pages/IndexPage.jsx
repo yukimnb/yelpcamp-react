@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../components/ContextProvider";
 import { userLogout } from "../utils/userAPI";
+import { toast } from "react-toastify";
 
 export const IndexPage = () => {
   const [context, setContext] = useContext(AppContext);
@@ -13,6 +14,7 @@ export const IndexPage = () => {
     if (statusCode === 200) {
       setContext({});
       localStorage.removeItem("userInfo");
+      toast.success("ログアウトしました");
       navigate("/");
     } else {
       // TODO: もう少し詳細なエラーハンドリングを行う

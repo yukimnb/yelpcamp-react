@@ -5,6 +5,7 @@ import { StyledGlobal } from "./components/StyledGlobal";
 import { routesBasic } from "./routes/routesBasic";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ContextProvider } from "./components/ContextProvider";
+import { Flash } from "./components/Flash";
 
 const cli = new QueryClient();
 
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ContextProvider>
       <QueryClientProvider client={cli}>
         <StyledGlobal />
+        <Flash />
         <RouterProvider router={routesBasic} />
       </QueryClientProvider>
     </ContextProvider>
