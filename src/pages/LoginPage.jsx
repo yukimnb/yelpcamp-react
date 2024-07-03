@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { userLogin } from "../utils/api";
+import { userLogin } from "../utils/userAPI";
 import { AppContext } from "../components/ContextProvider";
 
 export const LoginPage = () => {

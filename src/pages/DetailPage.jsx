@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
-import { getCampgroundDetail, deleteCampground } from "../utils/api";
+import { getCampgroundDetail, deleteCampground } from "../utils/campgroundAPI";
 import { getReview, deleteReview } from "../utils/reviewAPI";
 import { Map } from "../components/Map";
 import { AppContext } from "../components/ContextProvider";

@@ -1,7 +1,8 @@
 import { useState, useContext } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, Link } from "react-router-dom";
-import { getForwardGeocoding, createCampground } from "../utils/api";
+import { createCampground } from "../utils/campgroundAPI";
+import { getForwardGeocoding } from "../utils/mapboxAPI";
 import { AppContext } from "../components/ContextProvider";
 
 export const CreatePage = () => {

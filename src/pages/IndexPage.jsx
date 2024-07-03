@@ -2,7 +2,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../components/ContextProvider";
-import { userLogout } from "../utils/api";
+import { userLogout } from "../utils/userAPI";
 
 export const IndexPage = () => {
   const [context, setContext] = useContext(AppContext);

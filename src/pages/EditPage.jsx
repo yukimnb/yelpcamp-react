@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-import { getForwardGeocoding, updateCampground } from "../utils/api";
+import { updateCampground } from "../utils/campgroundAPI";
+import { getForwardGeocoding } from "../utils/mapboxAPI";
 
 export const EditPage = () => {
   const { id } = useParams();

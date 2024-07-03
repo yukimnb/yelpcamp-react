@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { getCampgroundsList } from "../utils/api";
+import { getCampgroundsList } from "../utils/campgroundAPI";
 import { Link } from "react-router-dom";
 import { ClusterMap } from "../components/ClusterMap";
 

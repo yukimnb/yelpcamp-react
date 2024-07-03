@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "./ContextProvider";
 import { Link, useNavigate } from "react-router-dom";
-import { userLogout } from "../utils/api";
+import { userLogout } from "../utils/userAPI";
 
 export const NavBar = () => {
   const [context, setContext] = useContext(AppContext);
