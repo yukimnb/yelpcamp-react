@@ -5,7 +5,6 @@ import { getCampgroundDetail, deleteCampground } from "../utils/campgroundAPI";
 import { getReview, deleteReview } from "../utils/reviewAPI";
 import { Map } from "../components/Map";
 import { AppContext } from "../components/ContextProvider";
-import "../assets/css/starability.css";
 
 export const DetailPage = () => {
   const { id } = useParams();

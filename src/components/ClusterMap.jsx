@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import PropTypes from "prop-types";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;

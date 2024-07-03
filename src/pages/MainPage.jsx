@@ -1,6 +1,8 @@
 import { Footer } from "../components/Footer";
 import { NavBar } from "../components/NavBar";
 import { Outlet } from "react-router-dom";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "../assets/css/starability.css";
 
 export const MainPage = () => {
   return (
