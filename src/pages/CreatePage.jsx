@@ -25,11 +25,11 @@ export const CreatePage = () => {
   const getGeocodeMutation = useMutation(getForwardGeocoding);
   const createMutation = useMutation(createCampground);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.stopPropagation();
+      e.stopPropagation();
     } else {
       const formData = new FormData();
       Object.keys(formValues).forEach((key) => {

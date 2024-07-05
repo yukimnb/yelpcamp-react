@@ -19,11 +19,11 @@ export const CreateReviewPage = () => {
 
   const createMutation = useMutation(createReview);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.stopPropagation();
+      e.stopPropagation();
     } else {
       createMutation.mutate([id, formValues], {
         onSuccess: () => {

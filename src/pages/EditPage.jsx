@@ -20,13 +20,13 @@ export const EditPage = () => {
   const getGeocodeMutation = useMutation(getForwardGeocoding);
   const updateMutation = useMutation(updateCampground);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (e) => {
     setValidated(true);
-    event.preventDefault();
+    e.preventDefault();
 
-    const form = event.currentTarget;
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.stopPropagation();
+      e.stopPropagation();
     } else {
       const formData = new FormData();
       Object.keys(formValues).forEach((key) => {

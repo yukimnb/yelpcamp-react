@@ -16,11 +16,11 @@ export const SignUpPage = () => {
   const signUpMutation = useMutation(userSignUp);
   const loginMutation = useMutation(userLogin);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.stopPropagation();
+      e.stopPropagation();
     } else {
       signUpMutation.mutate(
         {
