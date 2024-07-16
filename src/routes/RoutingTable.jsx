@@ -10,7 +10,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { EditPage } from "../pages/EditPage";
 import { CreateReviewPage } from "../pages/CreateReviewPage";
 
-export const routesBasic = createBrowserRouter(
+export const RoutingTable = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<IndexPage />} />
