@@ -27,7 +27,7 @@ export const ListPage = () => {
       <h1>キャンプ場一覧</h1>
       {data &&
         data
-          .sort((a, b) => a.id - b.id)
+          .sort((a, b) => b.id - a.id)
           .map((object) => (
             <div className="card mb-3" key={object.title}>
               <div className="row">

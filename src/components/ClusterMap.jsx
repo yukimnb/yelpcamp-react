@@ -9,7 +9,6 @@ export const ClusterMap = ({ newData }) => {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
-    // 意味分かってないのでどこかで潰す
     if (mapContainerRef.current) {
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
@@ -122,7 +121,7 @@ export const ClusterMap = ({ newData }) => {
         if (map) map.remove();
       };
     }
-  }, [mapContainerRef, newData]);
+  }, [newData]);
   return <StyledDiv ref={mapContainerRef} />;
 };
 

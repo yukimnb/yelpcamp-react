@@ -9,7 +9,7 @@ import { useUser } from "../components/ContextProvider";
 export const DetailPage = () => {
   const { id } = useParams();
   const { data, error, isLoading, isError } = useQuery("detail", () => getCampgroundDetail(id));
-  const { data: reviews } = useQuery("reviews", () => getReview(id));
+  const { data: reviews, isSuccess } = useQuery("reviews", () => getReview(id));
   const deleteMutation = useMutation(deleteCampground);
   const deleteReviewMutation = useMutation(deleteReview);
   const [user] = useUser();
@@ -120,26 +120,29 @@ export const DetailPage = () => {
         </div>
         <div className="col-md-5">
           <Map geometry={data.geometry} location={data.location} />
-          {reviews && <h3 className="mt-4 mb-2">レビュー</h3>}
-          {reviews &&
-            reviews
-              .sort((a, b) => b.id - a.id)
-              .map((object) => (
-                <div className="card mb-3" key={object.id}>
-                  <div className="card-body">
-                    <h5 className="card-subtitle mb-2">{object.reviewer_name}</h5>
-                    <p className="card-title starability-result" data-rating={object.rating}>
-                      Rated: {object.rating} stars
-                    </p>
-                    <p className="card-text">コメント : {object.comment}</p>
-                    {user.name === object.reviewer_name && (
-                      <button className="btn btn-sm btn-danger" onClick={() => handleDeleteReview(object.id)}>
-                        削除する
-                      </button>
-                    )}
+          {isSuccess && reviews.length > 0 && (
+            <>
+              <h3 className="mt-4 mb-2">レビュー</h3>
+              {reviews
+                .sort((a, b) => b.id - a.id)
+                .map((object) => (
+                  <div className="card mb-3" key={object.id}>
+                    <div className="card-body">
+                      <h5 className="card-subtitle mb-2">{object.reviewer_name}</h5>
+                      <p className="card-title starability-result" data-rating={object.rating}>
+                        Rated: {object.rating} stars
+                      </p>
+                      <p className="card-text">コメント : {object.comment}</p>
+                      {user.name === object.reviewer_name && (
+                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteReview(object.id)}>
+                          削除する
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </>
+          )}
         </div>
       </div>
     </>

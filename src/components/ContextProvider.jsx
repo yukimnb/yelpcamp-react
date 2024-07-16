@@ -26,6 +26,8 @@ const ContextProvider = ({ children }) => {
       }
     },
     // 初期値
+    {},
+    // 初期化関数
     () => {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       return userInfo !== null ? userInfo : {};
