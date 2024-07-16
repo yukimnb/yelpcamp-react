@@ -1,12 +1,12 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { userLogin } from "../utils/userAPI";
-import { AppContext } from "../components/ContextProvider";
 import { toast } from "react-toastify";
+import { useUser } from "../components/ContextProvider";
 
 export const LoginPage = () => {
-  const [, setContext] = useContext(AppContext);
+  const [, setUser] = useUser();
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     email: "",
@@ -23,13 +23,7 @@ export const LoginPage = () => {
     } else {
       mutation.mutate(formValues, {
         onSuccess: (data) => {
-          const userInfo = {
-            key: data.key,
-            userId: data.id,
-            userName: data.name,
-          };
-          setContext(userInfo);
-          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+          setUser({ type: "SET_USER", data });
           toast.success(`${data.name} としてログインしました`);
           navigate("/campgrounds");
         },

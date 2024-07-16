@@ -1,18 +1,18 @@
-import { useContext } from "react";
-import { AppContext } from "./ContextProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogout } from "../utils/userAPI";
 import { toast } from "react-toastify";
+import { useUser } from "./ContextProvider";
 
 export const NavBar = () => {
-  const [context, setContext] = useContext(AppContext);
+  const [user, setUser] = useUser();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     const statusCode = await userLogout();
     if (statusCode === 200) {
-      setContext({});
-      localStorage.removeItem("userInfo");
+      setUser({
+        type: "REMOVE_USER",
+      });
       toast.success("ログアウトしました。");
       navigate("/");
     } else {
@@ -42,14 +42,14 @@ export const NavBar = () => {
             <Link to="/campgrounds" className="nav-link">
               キャンプ場一覧
             </Link>
-            {context.key && (
+            {user.key && (
               <Link to="/campgrounds/create" className="nav-link">
                 キャンプ場作成
               </Link>
             )}
           </div>
           <div className="navbar-nav ms-auto">
-            {context.key ? (
+            {user.key ? (
               <Link className="nav-link" onClick={handleLogout}>
                 ログアウト
               </Link>
@@ -65,7 +65,7 @@ export const NavBar = () => {
             )}
           </div>
         </div>
-        {context.key && <span className="badge rounded-pill text-bg-warning mx-2">{context.userName}</span>}
+        {user.key && <span className="badge rounded-pill text-bg-warning mx-2">{user.name}</span>}
       </div>
     </nav>
   );

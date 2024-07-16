@@ -1,19 +1,17 @@
-import { useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { AppContext } from "../components/ContextProvider";
 import { userLogout } from "../utils/userAPI";
 import { toast } from "react-toastify";
+import { useUser } from "../components/ContextProvider";
 
 export const IndexPage = () => {
-  const [context, setContext] = useContext(AppContext);
+  const [user, setUser] = useUser();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     const statusCode = await userLogout();
     if (statusCode === 200) {
-      setContext({});
-      localStorage.removeItem("userInfo");
+      setUser({ type: "REMOVE_USER" });
       toast.success("ログアウトしました");
       navigate("/");
     } else {
@@ -29,7 +27,7 @@ export const IndexPage = () => {
           <header className="mb-auto">
             <h3 className="float-sm-start  mb-sm-5">YelpCamp</h3>
             <nav className=" float-sm-end mt-1">
-              {context.key ? (
+              {user.key ? (
                 <NavLink onClick={handleLogout}>ログアウト</NavLink>
               ) : (
                 <>

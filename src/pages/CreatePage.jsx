@@ -1,14 +1,14 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, Link } from "react-router-dom";
 import { createCampground } from "../utils/campgroundAPI";
 import { getForwardGeocoding } from "../utils/mapboxAPI";
-import { AppContext } from "../components/ContextProvider";
 import { toast } from "react-toastify";
+import { useUser } from "../components/ContextProvider";
 
 export const CreatePage = () => {
   const navigate = useNavigate();
-  const [context] = useContext(AppContext);
+  const [user] = useUser();
   const [validated, setValidated] = useState(false);
   const [formValues, setFormValues] = useState({
     title: "",
@@ -19,7 +19,7 @@ export const CreatePage = () => {
     image1: "",
     image2: "",
     image3: "",
-    author: context.userId,
+    author: user.id,
   });
 
   const getGeocodeMutation = useMutation(getForwardGeocoding);

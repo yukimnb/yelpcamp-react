@@ -1,11 +1,10 @@
-import { useContext } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import { getCampgroundDetail, deleteCampground } from "../utils/campgroundAPI";
 import { getReview, deleteReview } from "../utils/reviewAPI";
 import { Map } from "../components/Map";
-import { AppContext } from "../components/ContextProvider";
 import { toast } from "react-toastify";
+import { useUser } from "../components/ContextProvider";
 
 export const DetailPage = () => {
   const { id } = useParams();
@@ -13,7 +12,7 @@ export const DetailPage = () => {
   const { data: reviews } = useQuery("reviews", () => getReview(id));
   const deleteMutation = useMutation(deleteCampground);
   const deleteReviewMutation = useMutation(deleteReview);
-  const [context] = useContext(AppContext);
+  const [user] = useUser();
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -98,10 +97,10 @@ export const DetailPage = () => {
               <li className="list-group-item">登録者：{data.author_name}</li>
               <li className="list-group-item">&yen; {data.price} / 泊</li>
             </ul>
-            {context.key && (
+            {user.key && (
               <>
                 <div className="card-body">
-                  {context.userName === data.author_name && (
+                  {user.name === data.author_name && (
                     <>
                       <Link to={`/campgrounds/${data.id}/edit`} className="btn btn-info me-2" state={data}>
                         編集する
@@ -133,7 +132,7 @@ export const DetailPage = () => {
                       Rated: {object.rating} stars
                     </p>
                     <p className="card-text">コメント : {object.comment}</p>
-                    {context.userName === object.reviewer_name && (
+                    {user.name === object.reviewer_name && (
                       <button className="btn btn-sm btn-danger" onClick={() => handleDeleteReview(object.id)}>
                         削除する
                       </button>

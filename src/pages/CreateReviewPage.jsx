@@ -1,20 +1,20 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { createReview } from "../utils/reviewAPI";
-import { AppContext } from "../components/ContextProvider";
 import { toast } from "react-toastify";
+import { useUser } from "../components/ContextProvider";
 
 export const CreateReviewPage = () => {
   const navigate = useNavigate();
-  const [context] = useContext(AppContext);
+  const [user] = useUser();
   const [validated, setValidated] = useState(false);
   const { id } = useParams();
   const [formValues, setFormValues] = useState({
     rating: "5",
     comment: "",
     campground: id,
-    reviewer: context.userId,
+    reviewer: user.id,
   });
 
   const createMutation = useMutation(createReview);
