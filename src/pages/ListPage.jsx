@@ -1,54 +1,70 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { getCampgroundsList } from "../utils/campgroundAPI";
 import { Link } from "react-router-dom";
 import { ClusterMap } from "../components/ClusterMap";
 
 export const ListPage = () => {
-  const { data, error, isLoading, isError, isSuccess } = useQuery("list", getCampgroundsList);
-  let newData = [];
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  const [list, setList] = useState([]);
+  const [desc, setDesc] = useState(false);
+  const { error, isError } = useQuery("list", getCampgroundsList, {
+    onSuccess: (data) => {
+      const newData = data.map((object) => {
+        object.properties = { title: object.title };
+        return object;
+      });
+      setList(newData);
+    },
+  });
 
   if (isError) {
     return <p>Error: {error.message}</p>;
   }
 
-  if (isSuccess) {
-    newData = data.map((object) => {
-      object.properties = { title: object.title };
-      return object;
+  const handleSort = () => {
+    const sortedList = [...list];
+    sortedList.sort((a, b) => {
+      if (desc) {
+        return a.id - b.id;
+      } else {
+        return b.id - a.id;
+      }
     });
-  }
+    setDesc((prev) => !prev);
+    setList(sortedList);
+  };
 
   return (
     <>
-      <ClusterMap newData={newData} />
-      <h1>キャンプ場一覧</h1>
-      {data &&
-        data
-          .sort((a, b) => b.id - a.id)
-          .map((object) => (
-            <div className="card mb-3" key={object.title}>
-              <div className="row">
-                <div className="col-lg-4">
-                  <img src={object.image1} alt="" className="w-100 h-100" />
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">{object.title}</h5>
-                    <p className="card-text">{object.description}</p>
-                    <p className="card-text">
-                      <small className="text-muted">{object.location}</small>
-                    </p>
-                    <Link to={`/campgrounds/${object.id}`} className="btn btn-primary">
-                      {object.title}の詳細
-                    </Link>
-                  </div>
+      <ClusterMap newData={list} />
+      <div className="d-flex justify-content-between align-items-center mt-4">
+        <h1>キャンプ場一覧</h1>
+        <button onClick={handleSort} className="btn btn-danger">
+          ↑↓ {desc ? "古い順に並び替え" : "新しい順に並び替え"}
+        </button>
+      </div>
+      {list &&
+        list.map((object) => (
+          <div className="card mb-3" key={object.title}>
+            <div className="row">
+              <div className="col-lg-4">
+                <img src={object.image1} alt="" className="w-100 h-100" />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                  <h5 className="card-title">{object.title}</h5>
+                  <p className="card-text">{object.description}</p>
+                  <p className="card-text">
+                    <small className="text-muted">{object.location}</small>
+                  </p>
+                  <Link to={`/campgrounds/${object.id}`} className="btn btn-primary">
+                    {object.title}の詳細
+                  </Link>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
     </>
   );
 };
