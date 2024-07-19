@@ -4,9 +4,11 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { createReview } from "../utils/reviewAPI";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const CreateReviewPage = () => {
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
   const [validated, setValidated] = useState(false);
   const { id } = useParams();
@@ -30,9 +32,8 @@ export const CreateReviewPage = () => {
           toast.success("レビューを作成しました");
           navigate(`/campgrounds/${id}`);
         },
-        // TODO: もう少し詳細なエラーハンドリングを行う
         onError: (error) => {
-          console.log("Error", error);
+          showBoundary(error);
         },
       });
     }

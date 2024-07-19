@@ -5,9 +5,11 @@ import { createCampground } from "../utils/campgroundAPI";
 import { getForwardGeocoding } from "../utils/mapboxAPI";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const CreatePage = () => {
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
   const [validated, setValidated] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -43,15 +45,13 @@ export const CreatePage = () => {
               toast.success("キャンプ場を作成しました");
               navigate("/campgrounds");
             },
-            // TODO: もう少し詳細なエラーハンドリングを行う
             onError: (error) => {
-              console.log("Error", error);
+              showBoundary(error);
             },
           });
         },
-        // TODO: もう少し詳細なエラーハンドリングを行う
         onError: (error) => {
-          console.log("Error", error);
+          showBoundary(error);
         },
       });
     }

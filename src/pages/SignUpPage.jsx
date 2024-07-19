@@ -4,17 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { userSignUp, userLogin } from "../utils/userAPI";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const SignUpPage = () => {
   const [, setUser] = useUser();
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
+  const [validated, setValidated] = useState(false);
+  const signUpMutation = useMutation(userSignUp);
+  const loginMutation = useMutation(userLogin);
+
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
-  const [validated, setValidated] = useState(false);
-  const signUpMutation = useMutation(userSignUp);
-  const loginMutation = useMutation(userLogin);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,15 +39,13 @@ export const SignUpPage = () => {
                 toast.success(`ユーザー ${data.name} を作成しログインしました`);
                 navigate("/campgrounds");
               },
-              // TODO: もう少し詳細なエラーハンドリングを行う
               onError: (error) => {
-                console.log("Error", error);
+                showBoundary(error);
               },
             });
           },
-          // TODO: もう少し詳細なエラーハンドリングを行う
           onError: (error) => {
-            console.log("Error", error);
+            showBoundary(error);
           },
         }
       );

@@ -4,10 +4,15 @@ import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { updateCampground } from "../utils/campgroundAPI";
 import { getForwardGeocoding } from "../utils/mapboxAPI";
 import { toast } from "react-toastify";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const EditPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
+  const getGeocodeMutation = useMutation(getForwardGeocoding);
+  const updateMutation = useMutation(updateCampground);
+
   const { state: data } = useLocation();
   const [validated, setValidated] = useState(false);
   const [formValues, setFormValues] = useState(data);
@@ -16,9 +21,6 @@ export const EditPage = () => {
     newImage2: undefined,
     newImage3: undefined,
   });
-
-  const getGeocodeMutation = useMutation(getForwardGeocoding);
-  const updateMutation = useMutation(updateCampground);
 
   const handleSubmit = (e) => {
     setValidated(true);
@@ -52,15 +54,13 @@ export const EditPage = () => {
                 toast.success("キャンプ場を更新しました");
                 navigate(`/campgrounds/${id}`);
               },
-              // TODO: もう少し詳細なエラーハンドリングを行う
               onError: (error) => {
-                console.log("Error", error);
+                showBoundary(error);
               },
             });
           },
-          // TODO: もう少し詳細なエラーハンドリングを行う
           onError: (error) => {
-            console.log("Error", error);
+            showBoundary(error);
           },
         });
       } else {
@@ -69,9 +69,8 @@ export const EditPage = () => {
             toast.success("キャンプ場を更新しました");
             navigate(`/campgrounds/${id}`);
           },
-          // TODO: もう少し詳細なエラーハンドリングを行う
           onError: (error) => {
-            console.log("Error", error);
+            showBoundary(error);
           },
         });
       }

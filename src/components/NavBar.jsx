@@ -1,24 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
 import { userLogout } from "../utils/userAPI";
 import { toast } from "react-toastify";
 import { useUser } from "./ContextProvider";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const NavBar = () => {
   const [user, setUser] = useUser();
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
+  const logoutMutation = useMutation(userLogout);
 
-  const handleLogout = async () => {
-    const statusCode = await userLogout();
-    if (statusCode === 200) {
-      setUser({
-        type: "REMOVE_USER",
-      });
-      toast.success("ログアウトしました。");
-      navigate("/");
-    } else {
-      // TODO: もう少し詳細なエラーハンドリングを行う
-      console.log("ログアウトに失敗しました");
-    }
+  const handleLogout = () => {
+    logoutMutation.mutate(null, {
+      onSuccess: () => {
+        setUser({
+          type: "REMOVE_USER",
+        });
+        toast.success("ログアウトしました。");
+        navigate("/");
+      },
+      onError: (error) => {
+        showBoundary(error);
+      },
+    });
   };
 
   return (

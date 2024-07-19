@@ -5,22 +5,27 @@ import { getReview, deleteReview } from "../utils/reviewAPI";
 import { Map } from "../components/Map";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const DetailPage = () => {
   const { id } = useParams();
-  const { data, error, isLoading, isError } = useQuery("detail", () => getCampgroundDetail(id));
-  const { data: reviews, isSuccess } = useQuery("reviews", () => getReview(id));
-  const deleteMutation = useMutation(deleteCampground);
-  const deleteReviewMutation = useMutation(deleteReview);
   const [user] = useUser();
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
+  const deleteMutation = useMutation(deleteCampground);
+  const deleteReviewMutation = useMutation(deleteReview);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-  if (isError) {
-    return <p>Error: {error.message}</p>;
-  }
+  const { data } = useQuery("detail", () => getCampgroundDetail(id), {
+    onError: (error) => {
+      showBoundary(error);
+    },
+  });
+
+  const { data: reviews } = useQuery("reviews", () => getReview(id), {
+    onError: (error) => {
+      showBoundary(error);
+    },
+  });
 
   const handleDelete = () => {
     deleteMutation.mutate(id, {
@@ -29,7 +34,7 @@ export const DetailPage = () => {
         navigate("/campgrounds");
       },
       onError: (error) => {
-        console.log("Error", error);
+        showBoundary(error);
       },
     });
   };
@@ -41,7 +46,7 @@ export const DetailPage = () => {
         navigate(0);
       },
       onError: (error) => {
-        console.log("Error", error);
+        showBoundary(error);
       },
     });
   };
@@ -120,7 +125,7 @@ export const DetailPage = () => {
         </div>
         <div className="col-md-5">
           <Map geometry={data.geometry} location={data.location} />
-          {isSuccess && reviews.length > 0 && (
+          {reviews.length > 0 && (
             <>
               <h3 className="mt-4 mb-2">レビュー</h3>
               {reviews

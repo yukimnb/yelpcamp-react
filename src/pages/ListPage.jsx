@@ -3,11 +3,14 @@ import { useQuery } from "react-query";
 import { getCampgroundsList } from "../utils/campgroundAPI";
 import { Link } from "react-router-dom";
 import { ClusterMap } from "../components/ClusterMap";
+import { useErrorBoundary } from "react-error-boundary";
 
 export const ListPage = () => {
   const [list, setList] = useState([]);
   const [desc, setDesc] = useState(false);
-  const { error, isError } = useQuery("list", getCampgroundsList, {
+  const { showBoundary } = useErrorBoundary();
+
+  useQuery("list", getCampgroundsList, {
     onSuccess: (data) => {
       const newData = data.map((object) => {
         object.properties = { title: object.title };
@@ -15,11 +18,10 @@ export const ListPage = () => {
       });
       setList(newData);
     },
+    onError: (error) => {
+      showBoundary(error);
+    },
   });
-
-  if (isError) {
-    return <p>Error: {error.message}</p>;
-  }
 
   const handleSort = () => {
     const sortedList = [...list];
