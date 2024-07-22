@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const ENDPOINT_URL = "http://localhost:8000/api/v1/";
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 export const getCampgroundsList = async () => {
-  const res = await axios.get(ENDPOINT_URL + "campgrounds/");
+  const res = await axios.get(API_ENDPOINT + "campgrounds/");
   if (res.status !== 200) {
     throw new Error("キャンプ場一覧の取得に失敗しました");
   }
@@ -11,7 +11,7 @@ export const getCampgroundsList = async () => {
 };
 
 export const getCampgroundDetail = async (id) => {
-  const res = await axios.get(ENDPOINT_URL + `campgrounds/${id}/`);
+  const res = await axios.get(API_ENDPOINT + `campgrounds/${id}/`);
   if (res.status !== 200) {
     throw new Error("キャンプ場の詳細情報の取得に失敗しました");
   }
@@ -19,7 +19,7 @@ export const getCampgroundDetail = async (id) => {
 };
 
 export const createCampground = async (data) => {
-  const res = await axios.post(ENDPOINT_URL + "campgrounds/", data, {
+  const res = await axios.post(API_ENDPOINT + "campgrounds/", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -30,7 +30,7 @@ export const createCampground = async (data) => {
 };
 
 export const updateCampground = async ([id, data]) => {
-  const res = await axios.patch(ENDPOINT_URL + `campgrounds/${id}/`, data, {
+  const res = await axios.patch(API_ENDPOINT + `campgrounds/${id}/`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -41,7 +41,7 @@ export const updateCampground = async ([id, data]) => {
 };
 
 export const deleteCampground = async (id) => {
-  const res = await axios.delete(ENDPOINT_URL + `campgrounds/${id}/`);
+  const res = await axios.delete(API_ENDPOINT + `campgrounds/${id}/`);
   if (res.status !== 204) {
     throw new Error("キャンプ場の削除に失敗しました");
   }
