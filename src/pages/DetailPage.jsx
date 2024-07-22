@@ -6,13 +6,8 @@ import { Map } from "../components/Map";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";
-import { useEffect } from "react";
 
 export const DetailPage = () => {
-  useEffect(() => {
-    throw new Error("エラーが発生しました");
-  }, []);
-
   const { id } = useParams();
   const [user] = useUser();
   const navigate = useNavigate();

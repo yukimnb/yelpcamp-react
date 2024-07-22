@@ -9,21 +9,25 @@ export const Map = ({ geometry, location }) => {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/outdoors-v12", // style URL
-      center: geometry.coordinates,
-      zoom: 9,
-    });
+    if (mapContainerRef.current) {
+      const map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: "mapbox://styles/mapbox/outdoors-v12", // style URL
+        center: geometry.coordinates,
+        zoom: 9,
+      });
 
-    new mapboxgl.Marker({ color: "red" })
-      .setLngLat(geometry.coordinates)
-      .setPopup(new mapboxgl.Popup({ offset: 30 }).setText(location))
-      .addTo(map);
+      new mapboxgl.Marker({ color: "red" })
+        .setLngLat(geometry.coordinates)
+        .setPopup(new mapboxgl.Popup({ offset: 30 }).setText(location))
+        .addTo(map);
 
-    // Clean up on unmount
-    return () => map.remove();
-  }, [geometry.coordinates, location]);
+      // Clean up on unmount
+      return () => {
+        if (map) map.remove();
+      };
+    }
+  }, [geometry, location]);
   return <StyledDiv ref={mapContainerRef} />;
 };
 

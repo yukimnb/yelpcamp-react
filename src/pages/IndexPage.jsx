@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";
 import { useMutation } from "react-query";
+import indexImage from "../assets/img/index.jpg";
 
 export const IndexPage = () => {
   const [user, setUser] = useUser();
@@ -66,7 +67,7 @@ export const IndexPage = () => {
 
 export const StyledBody = styled.div`
   height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(src/assets/img/index.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${indexImage});
   background-size: cover;
   background-position: center;
   text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);

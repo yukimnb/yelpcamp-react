@@ -24,7 +24,7 @@ export const ErrorFallBack = ({ error, resetErrorBoundary }) => {
 
       <p>エラーハンドリングの考慮不足のためお手数ですが、戻るボタンをクリックしてください。</p>
       <button className="mb-5" onClick={handleBack}>
-        一覧へ戻る
+        TOPへ戻る
       </button>
     </div>
   );
