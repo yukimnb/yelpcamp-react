@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 export const ErrorFallBack = ({ error, resetErrorBoundary }) => {
   const navigate = useNavigate();
+
   const handleBack = () => {
     resetErrorBoundary();
-    navigate("/campgrounds");
+    navigate("/");
+    window.location.reload();
   };
 
   return (

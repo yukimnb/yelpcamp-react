@@ -7,8 +7,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ContextProvider } from "./components/ContextProvider";
 import { Flash } from "./components/Flash";
 import { Loading } from "./components/Loading";
-import { ErrorBoundary } from "react-error-boundary";
-import { ErrorFallBack } from "./components/ErrorFallBack";
 
 const cli = new QueryClient({
   defaultOptions: {
@@ -24,11 +22,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <QueryClientProvider client={cli}>
         <StyledGlobal />
         <Flash />
-        <ErrorBoundary FallbackComponent={ErrorFallBack}>
-          <Suspense fallback={<Loading />}>
-            <RouterProvider router={RoutingTable} />
-          </Suspense>
-        </ErrorBoundary>
+        <Suspense fallback={<Loading />}>
+          <RouterProvider router={RoutingTable} />
+        </Suspense>
       </QueryClientProvider>
     </ContextProvider>
   </React.StrictMode>

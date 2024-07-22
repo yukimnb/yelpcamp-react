@@ -6,17 +6,16 @@ import { ClusterMap } from "../components/ClusterMap";
 import { useErrorBoundary } from "react-error-boundary";
 
 export const ListPage = () => {
-  const [list, setList] = useState([]);
   const [desc, setDesc] = useState(false);
   const { showBoundary } = useErrorBoundary();
 
-  useQuery("list", getCampgroundsList, {
+  const { data, isSuccess } = useQuery("list", getCampgroundsList, {
     onSuccess: (data) => {
-      const newData = data.map((object) => {
+      data.map((object) => {
         object.properties = { title: object.title };
         return object;
       });
-      setList(newData);
+      return data;
     },
     onError: (error) => {
       showBoundary(error);
@@ -24,8 +23,7 @@ export const ListPage = () => {
   });
 
   const handleSort = () => {
-    const sortedList = [...list];
-    sortedList.sort((a, b) => {
+    data.sort((a, b) => {
       if (desc) {
         return a.id - b.id;
       } else {
@@ -33,20 +31,19 @@ export const ListPage = () => {
       }
     });
     setDesc((prev) => !prev);
-    setList(sortedList);
   };
 
   return (
     <>
-      <ClusterMap newData={list} />
+      <ClusterMap newData={data} />
       <div className="d-flex justify-content-between align-items-center mt-4">
         <h1>キャンプ場一覧</h1>
         <button onClick={handleSort} className="btn btn-danger">
           ↑↓ {desc ? "古い順に並び替え" : "新しい順に並び替え"}
         </button>
       </div>
-      {list &&
-        list.map((object) => (
+      {isSuccess &&
+        data.map((object) => (
           <div className="card mb-3" key={object.title}>
             <div className="row">
               <div className="col-lg-4">
