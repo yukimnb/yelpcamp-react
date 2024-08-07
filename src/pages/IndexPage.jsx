@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogout } from "../utils/userAPI";
 import { toast } from "react-toastify";
@@ -6,6 +6,7 @@ import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";
 import { useMutation } from "react-query";
 import indexImage from "../assets/img/index.jpg";
+import { Button } from "@mui/material";
 
 export const IndexPage = () => {
   const [user, setUser] = useUser();
@@ -55,6 +56,10 @@ export const IndexPage = () => {
             <StyledLink to="/campgrounds" className="btn btn-lg btn-secondary fw-bold border-white bg-white">
               キャンプ場へ
             </StyledLink>
+            <Button variant="contained" color="primary">
+              キャンプ場へ
+            </Button>
+            <a href="">test</a>
           </main>
           <footer className="mt-auto text-white-50">
             <p>&copy;YelpCamp 2024</p>

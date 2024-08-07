@@ -1,7 +1,9 @@
-import { createGlobalStyle } from "styled-components";
+import { Global, css } from "@emotion/react";
 
-export const StyledGlobal = createGlobalStyle`
-a {
-  text-decoration: none;
-}
+const global = css`
+  a {
+    text-decoration: none;
+  }
 `;
+
+export const StyledGlobal = () => <Global styles={global} />;

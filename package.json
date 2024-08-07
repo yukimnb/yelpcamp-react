@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.6",
+    "@mui/material": "^5.16.6",
     "axios": "^1.7.2",
     "mapbox-gl": "^3.4.0",
     "react": "^18.2.0",
@@ -17,8 +21,7 @@
     "react-error-boundary": "^4.0.13",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
-    "react-toastify": "^10.0.5",
-    "styled-components": "^6.1.11"
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
