@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { getCampgroundsList } from "../utils/campgroundAPI";
+import { getCampgroundsList } from "../apis/campground-api";
 import { Link } from "react-router-dom";
 import { ClusterMap } from "../components/ClusterMap";
 import { useErrorBoundary } from "react-error-boundary";

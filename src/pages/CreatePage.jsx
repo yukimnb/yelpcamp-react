@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, Link } from "react-router-dom";
-import { createCampground } from "../utils/campgroundAPI";
-import { getForwardGeocoding } from "../utils/mapboxAPI";
+import { createCampground } from "../apis/campground-api";
+import { getForwardGeocoding } from "../apis/mapbox-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";

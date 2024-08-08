@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { createReview } from "../utils/reviewAPI";
+import { createReview } from "../apis/review-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
-import { userLogout } from "../utils/userAPI";
+import { userLogout } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "./ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";

@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
-import { getCampgroundDetail, deleteCampground } from "../utils/campgroundAPI";
-import { getReview, deleteReview } from "../utils/reviewAPI";
+import { getCampgroundDetail, deleteCampground } from "../apis/campground-api";
+import { getReview, deleteReview } from "../apis/review-api";
 import { Map } from "../components/Map";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
