@@ -1,9 +1,18 @@
+import { Box, Container, Typography } from "@mui/material";
+
 export const Footer = () => {
   return (
-    <footer className="footer bg-dark text-white py-3 mt-auto">
-      <div className="container-fluid text-center">
-        <span className="text-white-50">&copy;YelpCamp 2024</span>
-      </div>
-    </footer>
+    <Box component="footer" sx={{ backgroundColor: "#212529", py: 2.5, mt: "auto" }}>
+      <Container>
+        <Typography
+          sx={{
+            textAlign: "center",
+            color: "rgba(255, 255, 255, 0.5)",
+            fontWeight: (theme) => theme.typography.fontWeightBold,
+          }}>
+          &copy;YelpCamp 2024
+        </Typography>
+      </Container>
+    </Box>
   );
 };
