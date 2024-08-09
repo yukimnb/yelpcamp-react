@@ -1,15 +1,41 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { userLogout } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "./ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";
+import { styled } from "@mui/material/styles";
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, MenuItem } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+
+const settings = [
+  { linkName: "ログイン", link: "/campgrounds/login" },
+  { linkName: "ユーザー登録", link: "/campgrounds/signup" },
+];
 
 export const NavBar = () => {
+  const [anchorElNav, setAnchorElNav] = useState(false);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const [user, setUser] = useUser();
   const navigate = useNavigate();
   const { showBoundary } = useErrorBoundary();
   const logoutMutation = useMutation(userLogout);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   const handleLogout = () => {
     logoutMutation.mutate(null, {
@@ -27,51 +53,124 @@ export const NavBar = () => {
   };
 
   return (
-    <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
-        <Link to={"/"} className="navbar-brand">
-          YelpCamp
-        </Link>
-        <button
-          className="navbar-toggler ms-auto"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <Link to="/campgrounds" className="nav-link">
+    <AppBar position="sticky" sx={{ backgroundColor: "#212529" }}>
+      <Container>
+        <Toolbar disableGutters>
+          <Typography
+            variant="h5"
+            noWrap
+            component={Link}
+            to={"/"}
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontWeight: (theme) => theme.typography.fontWeightBold,
+              letterSpacing: ".1rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}>
+            YelpCamp
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <NavLinkButton component={Link} to={"/campgrounds"}>
               キャンプ場一覧
-            </Link>
-            {user.key && (
-              <Link to="/campgrounds/create" className="nav-link">
-                キャンプ場作成
-              </Link>
-            )}
-          </div>
-          <div className="navbar-nav ms-auto">
-            {user.key ? (
-              <Link className="nav-link" onClick={handleLogout}>
-                ログアウト
-              </Link>
-            ) : (
-              <>
-                <Link to="/campgrounds/login" className="nav-link">
-                  ログイン
-                </Link>
-                <Link to="/campgrounds/signup" className="nav-link">
-                  ユーザー登録
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-        {user.key && <span className="badge rounded-pill text-bg-warning mx-2">{user.name}</span>}
-      </div>
-    </nav>
+            </NavLinkButton>
+            <NavLinkButton component={Link} to={"/campgrounds/create"}>
+              キャンプ場作成
+            </NavLinkButton>
+          </Box>
+
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton size="large" onClick={handleOpenNavMenu} color="inherit">
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}>
+              <MenuItem component={Link} to={"/campgrounds"}>
+                <Typography textAlign="center">キャンプ場一覧</Typography>
+              </MenuItem>
+              <MenuItem component={Link} to={"/campgrounds/create"}>
+                <Typography textAlign="center">キャンプ場作成</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+
+          <Typography
+            variant="h5"
+            noWrap
+            component={Link}
+            to={"/"}
+            sx={{
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontWeight: (theme) => theme.typography.fontWeightBold,
+              letterSpacing: ".1rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}>
+            YelpCamp
+          </Typography>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar sx={{ bgcolor: (theme) => theme.palette.success.light }}>
+                {user.key && user.name.toLocaleUpperCase().at(0)}
+              </Avatar>
+            </IconButton>
+            <Menu
+              sx={{ mt: "45px" }}
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}>
+              {user.key ? (
+                <MenuItem onClick={handleLogout}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              ) : (
+                settings.map((setting) => (
+                  <MenuItem key={setting.linkName} component={Link} to={setting.link}>
+                    <Typography textAlign="center">{setting.linkName}</Typography>
+                  </MenuItem>
+                ))
+              )}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
+
+const NavLinkButton = styled(Button)(({ theme }) => ({
+  my: 2,
+  color: "rgba(255,255,255,0.7)",
+  fontWeight: theme.typography.fontWeightBold,
+  display: "block",
+  "&:hover": {
+    color: "white",
+  },
+}));

@@ -1,19 +1,19 @@
 import { Footer } from "../components/Footer";
 import { NavBar } from "../components/NavBar";
 import { Outlet, ScrollRestoration } from "react-router-dom";
+import { Box, Container } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "../assets/css/starability.css";
 
 export const MainPage = () => {
   return (
-    <div className="d-flex flex-column vh-100">
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <NavBar />
-      <main className="container mt-5">
+      <Container fixed sx={{ mt: 5 }}>
         <ScrollRestoration />
-
         <Outlet />
-      </main>
+      </Container>
       <Footer />
-    </div>
+    </Box>
   );
 };

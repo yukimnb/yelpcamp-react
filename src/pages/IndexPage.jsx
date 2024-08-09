@@ -108,7 +108,7 @@ export const IndexPage = () => {
   );
 };
 
-export const NavLinkButton = styled(Button)(({ theme }) => ({
+const NavLinkButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(0.25, 0),
   fontWeight: theme.typography.fontWeightBold,
   color: "rgba(255, 255, 255, 0.5)",
