@@ -6,6 +6,23 @@ import { Map } from "../components/Map";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";
+import {
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Rating,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import Carousel from "react-material-ui-carousel";
 
 export const DetailPage = () => {
   const { id } = useParams();
@@ -14,6 +31,8 @@ export const DetailPage = () => {
   const { showBoundary } = useErrorBoundary();
   const deleteMutation = useMutation(deleteCampground);
   const deleteReviewMutation = useMutation(deleteReview);
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { data } = useQuery("detail", () => getCampgroundDetail(id), {
     onError: (error) => {
@@ -53,103 +72,118 @@ export const DetailPage = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="col-md-7">
-          <div id="campgroundCarousel" className="carousel slide">
-            <div className="carousel-inner">
-              <div className="carousel-item active">
-                <img src={data.image1} className="d-block w-100" alt="" />
-              </div>
-              {data.image2 && (
-                <div className="carousel-item">
-                  <img src={data.image2} className="d-block w-100" alt="" />
-                </div>
-              )}
-              {data.image3 && (
-                <div className="carousel-item">
-                  <img src={data.image3} className="d-block w-100" alt="" />
-                </div>
-              )}
-            </div>
-            {(data.image2 || data.image3) && (
-              <>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#campgroundCarousel"
-                  data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#campgroundCarousel"
-                  data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
-              </>
-            )}
-          </div>
-          <div className="card mb-3">
-            <div className="card-body">
-              <h5 className="card-title">{data.title}</h5>
-              <p className="card-text">{data.description}</p>
-            </div>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item text-muted">{data.location}</li>
-              <li className="list-group-item">登録者：{data.author_name}</li>
-              <li className="list-group-item">&yen; {data.price} / 泊</li>
-            </ul>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={7}>
+          <Card variant="outlined" sx={{ mb: { xs: 0, md: 3 } }}>
+            <Carousel animation="slide">
+              <CardMedia component="img" image={data.image1} height={350} />
+              {data.image2 && <CardMedia component="img" image={data.image2} height={350} />}
+              {data.image3 && <CardMedia component="img" image={data.image3} height={350} />}
+            </Carousel>
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                gap: 1,
+                pb: 0,
+              }}>
+              <Typography variant="h5" component="h1">
+                {data.title}
+              </Typography>
+              <Typography variant="body1" component="p">
+                {data.description}
+              </Typography>
+              <List>
+                <Divider />
+                <ListItem>
+                  <ListItemText primary={data.location} sx={{ color: "text.secondary" }} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemText primary={`登録者：${data.author_name}`} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemText primary={`¥ ${data.price} / 泊`} />
+                </ListItem>
+                <Divider />
+              </List>
+            </CardContent>
             {user.key && (
-              <>
-                <div className="card-body">
-                  {user.name === data.author_name && (
-                    <>
-                      <Link to={`/campgrounds/${data.id}/edit`} className="btn btn-info me-2" state={data}>
-                        編集する
-                      </Link>
-                      <button className="btn btn-danger me-2" onClick={handleDelete}>
-                        削除する
-                      </button>
-                    </>
-                  )}
-                  <Link to={`/campgrounds/${data.id}/createreview`} className="btn btn-success">
-                    レビューを作成
-                  </Link>
-                </div>
-              </>
+              <CardActions>
+                {user.name === data.author_name && (
+                  <>
+                    <Button
+                      component={Link}
+                      to={`/campgrounds/${data.id}/edit`}
+                      variant="contained"
+                      color="info"
+                      sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
+                      state={data}>
+                      {isSm ? "編集" : "編集する"}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleDelete}
+                      sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+                      {isSm ? "削除" : "削除する"}
+                    </Button>
+                  </>
+                )}
+                <Button
+                  component={Link}
+                  to={`/campgrounds/${data.id}/createreview`}
+                  variant="contained"
+                  color="success"
+                  sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+                  レビューを作成
+                </Button>
+              </CardActions>
             )}
-          </div>
-        </div>
-        <div className="col-md-5">
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={5}>
           <Map geometry={data.geometry} location={data.location} />
           {reviews.length > 0 && (
             <>
-              <h3 className="mt-4 mb-2">レビュー</h3>
+              <Typography
+                variant="h5"
+                component="h2"
+                sx={{ mb: 1, fontWeight: (theme) => theme.typography.fontWeightBold }}>
+                レビュー
+              </Typography>
               {reviews
                 .sort((a, b) => b.id - a.id)
                 .map((object) => (
-                  <div className="card mb-3" key={object.id}>
-                    <div className="card-body">
-                      <h5 className="card-subtitle mb-2">{object.reviewer_name}</h5>
-                      <p className="card-title starability-result" data-rating={object.rating}>
-                        Rated: {object.rating} stars
-                      </p>
-                      <p className="card-text">コメント : {object.comment}</p>
-                      {user.name === object.reviewer_name && (
-                        <button className="btn btn-sm btn-danger" onClick={() => handleDeleteReview(object.id)}>
+                  <Card variant="outlined" sx={{ mb: 3 }} key={object.id}>
+                    <CardContent sx={{ p: 1.5 }}>
+                      <Typography variant="h6" component="p">
+                        {object.reviewer_name}
+                      </Typography>
+                      <Rating name="read-only" value={object.rating} size="large" readOnly />
+                      <Typography variant="body1">コメント : {object.comment}</Typography>
+                    </CardContent>
+
+                    {user.name === object.reviewer_name && (
+                      <CardActions sx={{ p: 0.5 }}>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          size="small"
+                          sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
+                          onClick={() => handleDeleteReview(object.id)}>
                           削除する
-                        </button>
-                      )}
-                    </div>
-                  </div>
+                        </Button>
+                      </CardActions>
+                    )}
+                  </Card>
                 ))}
             </>
           )}
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
-import styled from "@emotion/styled";
 import mapboxgl from "mapbox-gl";
 import PropTypes from "prop-types";
+import { Box } from "@mui/material";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
@@ -122,14 +122,8 @@ export const ClusterMap = ({ newData }) => {
       };
     }
   }, [newData]);
-  return <StyledDiv ref={mapContainerRef} />;
+  return <Box sx={{ width: "100%", height: "500px" }} ref={mapContainerRef} />;
 };
-
-const StyledDiv = styled.div`
-  width: 100%;
-  height: 500px;
-  margin-bottom: 1rem;
-`;
 
 ClusterMap.propTypes = {
   newData: PropTypes.arrayOf(PropTypes.object),
