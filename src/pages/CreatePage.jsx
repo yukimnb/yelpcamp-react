@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, Link } from "react-router-dom";
 import { createCampground } from "../apis/campground-api";
@@ -6,13 +5,26 @@ import { getForwardGeocoding } from "../apis/mapbox-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useErrorBoundary } from "react-error-boundary";
+import { useForm } from "react-hook-form";
+import {
+  Grid,
+  Typography,
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  OutlinedInput,
+  Button,
+  FormHelperText,
+} from "@mui/material";
 
 export const CreatePage = () => {
   const navigate = useNavigate();
   const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
-  const [validated, setValidated] = useState(false);
-  const [formValues, setFormValues] = useState({
+
+  const defaultValues = {
     title: "",
     price: 0,
     location: "",
@@ -22,146 +34,162 @@ export const CreatePage = () => {
     image2: "",
     image3: "",
     author: user.id,
-  });
+  };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues });
   const getGeocodeMutation = useMutation(getForwardGeocoding);
   const createMutation = useMutation(createCampground);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    } else {
-      const formData = new FormData();
-      Object.keys(formValues).forEach((key) => {
+  const onSubmit = (formValues) => {
+    const formData = new FormData();
+    Object.keys(formValues).forEach((key) => {
+      if (key.startsWith("image") && formValues[key]) {
+        formData.append(key, formValues[key][0]);
+      } else {
         formData.append(key, formValues[key]);
-      });
-      getGeocodeMutation.mutate(formValues.location, {
-        onSuccess: ({ geometry }) => {
-          formData.set("geometry", JSON.stringify(geometry));
-          createMutation.mutate(formData, {
-            onSuccess: () => {
-              toast.success("キャンプ場を作成しました");
-              navigate("/campgrounds");
-            },
-            onError: (error) => {
-              showBoundary(error);
-            },
-          });
-        },
-        onError: (error) => {
-          showBoundary(error);
-        },
-      });
-    }
-    setValidated(true);
-  };
-
-  const handleForm = (e) => {
-    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleImage = (e) => {
-    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }));
+      }
+    });
+    getGeocodeMutation.mutate(formValues.location, {
+      onSuccess: ({ geometry }) => {
+        formData.set("geometry", JSON.stringify(geometry));
+        createMutation.mutate(formData, {
+          onSuccess: () => {
+            toast.success("キャンプ場を作成しました");
+            navigate("/campgrounds");
+          },
+          onError: (error) => {
+            showBoundary(error);
+          },
+        });
+      },
+      onError: (error) => {
+        showBoundary(error);
+      },
+    });
   };
 
   return (
     <>
-      <div className="row">
-        <h1 className="text-center">キャンプ場の新規登録</h1>
-        <div className="offset-md-2 col-md-8">
-          <form className={validated ? "was-validated" : ""} onSubmit={handleSubmit} noValidate>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="title">
-                タイトル
-              </label>
-              <input
-                className="form-control"
-                type="text"
+      <Typography variant="h4" component="h1" align="center" sx={{ mb: 3 }}>
+        キャンプ場の新規登録
+      </Typography>
+      <Grid container>
+        <Grid item sm={1} md={2}></Grid>
+        <Grid item xs={12} sm={10} md={8}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            sx={{ display: "flex", flexDirection: "column", gap: 3, mb: 5 }}>
+            <Box>
+              <TextField
+                label="タイトル"
+                variant="outlined"
+                fullWidth
                 name="title"
-                id="title"
-                value={formValues.title}
-                onChange={handleForm}
-                required
+                error={errors.title}
+                helperText={errors.title?.message}
+                {...register("title", {
+                  required: "タイトルは必須です",
+                  maxLength: { value: 50, message: "タイトルは50文字以内で入力してください" },
+                })}
+                InputLabelProps={{ shrink: true }}
               />
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="location">
-                場所
-              </label>
-              <input
-                className="form-control"
-                type="text"
+            </Box>
+            <Box>
+              <TextField
+                label="場所"
+                variant="outlined"
+                fullWidth
                 name="location"
-                id="location"
-                value={formValues.location}
-                onChange={handleForm}
-                required
+                error={errors.location}
+                helperText={errors.location?.message}
+                {...register("location", {
+                  required: "場所は必須です",
+                })}
+                InputLabelProps={{ shrink: true }}
               />
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="price">
-                価格
-              </label>
-              <div className="input-group">
-                <span className="input-group-text" id="price-label">
-                  &yen;
-                </span>
-                <input
+            </Box>
+            <Box>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="price">価格</InputLabel>
+                <OutlinedInput
                   type="number"
-                  className="form-control"
                   id="price"
+                  label="価格"
                   placeholder="0"
-                  aria-label="価格"
-                  aria-describedby="price-label"
                   name="price"
-                  value={formValues.price}
-                  onChange={handleForm}
-                  required
+                  startAdornment={
+                    <InputAdornment position="start" sx={{ ml: 1, mr: 2 }}>
+                      &yen;
+                    </InputAdornment>
+                  }
+                  error={errors.price}
+                  {...register("price", {
+                    required: "価格は必須です",
+                    min: { value: 0, message: "価格は0以上の数値で入力してください" },
+                  })}
                 />
-              </div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="description">
-                説明
-              </label>
-              <textarea
-                className="form-control"
+                <FormHelperText error={errors.price}>{errors.price?.message}</FormHelperText>
+              </FormControl>
+            </Box>
+            <Box>
+              <TextField
+                multiline
+                label="説明"
+                variant="outlined"
+                fullWidth
                 name="description"
-                id="description"
-                value={formValues.description}
-                onChange={handleForm}
-                required></textarea>
-            </div>
+                rows={4}
+                error={errors.description}
+                helperText={errors.description?.message}
+                {...register("description", {
+                  required: "説明は必須です",
+                })}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Box>
             {/* image要素 * 3作成 */}
             {[...Array(3)].map((_, i) => {
               const idx = i + 1;
               return (
-                <div className="mb-3" key={idx}>
-                  <label className="form-label" htmlFor={`image${idx}`}>
-                    画像{idx}
-                  </label>
-                  <input
-                    className="form-control"
-                    type="file"
-                    name={`image${idx}`}
-                    id={`image${idx}`}
-                    accept="image/*"
-                    onChange={handleImage}
-                    required={idx === 1 && true}
-                  />
-                  {idx === 1 && <div className="invalid-feedback">キャンプ場の登録には1枚以上の画像が必要です</div>}
-                </div>
+                <Box key={idx}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor={`image${idx}`} shrink>
+                      画像{idx}
+                    </InputLabel>
+                    <OutlinedInput
+                      type="file"
+                      name={`image${idx}`}
+                      id={`image${idx}`}
+                      label={`画像${idx}`}
+                      inputProps={{ accept: "image/*" }}
+                      notched
+                      error={errors[`image${idx}`]}
+                      {...register(`image${idx}`, {
+                        required: idx === 1 ? "キャンプ場の登録には1枚以上の画像が必要です" : false,
+                      })}
+                    />
+                    <FormHelperText error={errors[`image${idx}`]}>{errors[`image${idx}`]?.message}</FormHelperText>
+                  </FormControl>
+                </Box>
               );
             })}
-            <div className="mb-3">
-              <button className="btn btn-success">登録する</button>
-            </div>
-          </form>
-          <Link to="/campgrounds">一覧に戻る</Link>
-        </div>
-      </div>
+            <Box>
+              <Button type="submit" variant="contained" color="success" sx={{ mr: 3 }}>
+                登録する
+              </Button>
+              <Button component={Link} color="error" to="/campgrounds">
+                キャンセル
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
     </>
   );
 };
