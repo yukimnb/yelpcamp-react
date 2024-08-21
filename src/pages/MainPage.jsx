@@ -9,7 +9,7 @@ export const MainPage = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <NavBar />
-      <Container fixed sx={{ mt: 5 }}>
+      <Container fixed sx={{ mt: 5, flexGrow: 1 }}>
         <ScrollRestoration />
         <Outlet />
       </Container>
