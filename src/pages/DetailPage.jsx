@@ -21,8 +21,21 @@ import {
   Rating,
   useTheme,
   useMediaQuery,
+  Box,
 } from "@mui/material";
-import Carousel from "react-material-ui-carousel";
+import { styled } from "@mui/material/styles";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
+
+const SwiperBox = styled(Box)`
+  .swiper-button-prev,
+  .swiper-button-next {
+    --swiper-navigation-color: white;
+  }
+`;
 
 export const DetailPage = () => {
   const { id } = useParams();
@@ -75,11 +88,23 @@ export const DetailPage = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={7}>
           <Card variant="outlined" sx={{ mb: { xs: 0, md: 3 } }}>
-            <Carousel animation="slide">
-              <CardMedia component="img" image={data.image1} height={350} />
-              {data.image2 && <CardMedia component="img" image={data.image2} height={350} />}
-              {data.image3 && <CardMedia component="img" image={data.image3} height={350} />}
-            </Carousel>
+            <SwiperBox>
+              <Swiper modules={[Navigation, Autoplay]} slidesPerView={1} navigation autoplay={{ delay: 5000 }}>
+                <SwiperSlide>
+                  <CardMedia component="img" image={data.image1} height={350} />
+                </SwiperSlide>
+                {data.image2 && (
+                  <SwiperSlide>
+                    <CardMedia component="img" image={data.image2} height={350} />
+                  </SwiperSlide>
+                )}
+                {data.image3 && (
+                  <SwiperSlide>
+                    <CardMedia component="img" image={data.image3} height={350} />
+                  </SwiperSlide>
+                )}
+              </Swiper>
+            </SwiperBox>
             <CardContent
               sx={{
                 display: "flex",
@@ -162,7 +187,7 @@ export const DetailPage = () => {
                       <Typography variant="h6" component="p">
                         {object.reviewer_name}
                       </Typography>
-                      <Rating name="read-only" value={object.rating} size="large" readOnly />
+                      <Rating name="read-only" value={Number(object.rating)} size="large" readOnly />
                       <Typography variant="body1">コメント : {object.comment}</Typography>
                     </CardContent>
 
