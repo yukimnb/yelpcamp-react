@@ -5,6 +5,19 @@ import { updateCampground } from "../apis/campground-api";
 import { getForwardGeocoding } from "../apis/mapbox-api";
 import { toast } from "react-toastify";
 import { useErrorBoundary } from "react-error-boundary";
+import { useForm } from "react-hook-form";
+import {
+  Grid,
+  Typography,
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  OutlinedInput,
+  Button,
+  FormHelperText,
+} from "@mui/material";
 
 export const EditPage = () => {
   const { id } = useParams();
@@ -14,56 +27,53 @@ export const EditPage = () => {
   const updateMutation = useMutation(updateCampground);
 
   const { state: data } = useLocation();
-  const [validated, setValidated] = useState(false);
-  const [formValues, setFormValues] = useState(data);
+
   const [newImages, setNewImages] = useState({
-    newImage1: undefined,
-    newImage2: undefined,
-    newImage3: undefined,
+    new1: undefined,
+    new2: undefined,
+    new3: undefined,
   });
 
-  const handleSubmit = (e) => {
-    setValidated(true);
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({ defaultValues: data });
 
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    } else {
-      const formData = new FormData();
-      Object.keys(formValues).forEach((key) => {
-        if (formValues[key] !== data[key]) {
-          formData.append(key, formValues[key]);
+  const handleImage = (e) => {
+    setNewImages((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.files[0],
+    }));
+  };
+
+  const handleDeleteImage = (e) => {
+    setValue(e.target.name, e.target.checked ? "" : data[e.target.name]);
+  };
+
+  const onSubmit = (formValues) => {
+    const formData = new FormData();
+    Object.keys(formValues).forEach((key) => {
+      if (formValues[key] !== data[key]) {
+        formData.append(key, formValues[key]);
+      }
+    });
+
+    Object.keys(newImages).forEach((key) => {
+      if (newImages[key]) {
+        const newKey = key.replace("new", "image");
+        if (formData.has(newKey)) {
+          formData.set(newKey, newImages[key]);
+        } else {
+          formData.append(newKey, newImages[key]);
         }
-        if (key.includes("image")) {
-          const [first, ...rest] = key;
-          const newKey = "new" + first.toUpperCase() + rest.join("");
-          if (newImages[newKey] && formData.has(key)) {
-            formData.set(key, newImages[newKey]);
-          } else if (newImages[newKey] && !formData.has(key)) {
-            formData.append(key, newImages[newKey]);
-          }
-        }
-      });
-      if (formData.has("location")) {
-        getGeocodeMutation.mutate(formValues.location, {
-          onSuccess: ({ geometry }) => {
-            formData.set("geometry", JSON.stringify(geometry));
-            updateMutation.mutate([id, formData], {
-              onSuccess: () => {
-                toast.success("キャンプ場を更新しました");
-                navigate(`/campgrounds/${id}`);
-              },
-              onError: (error) => {
-                showBoundary(error);
-              },
-            });
-          },
-          onError: (error) => {
-            showBoundary(error);
-          },
-        });
-      } else {
+      }
+    });
+
+    getGeocodeMutation.mutate(formValues.location, {
+      onSuccess: ({ geometry }) => {
+        formData.set("geometry", JSON.stringify(geometry));
         updateMutation.mutate([id, formData], {
           onSuccess: () => {
             toast.success("キャンプ場を更新しました");
@@ -73,136 +83,147 @@ export const EditPage = () => {
             showBoundary(error);
           },
         });
-      }
-    }
-  };
-
-  const handleForm = (e) => {
-    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleImage = (e) => {
-    setNewImages((prev) => ({ ...prev, [e.target.name]: e.target.files[0] }));
-  };
-  const handleDeleteImage = (e) => {
-    setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.checked ? "" : data[e.target.name] }));
+      },
+      onError: (error) => {
+        showBoundary(error);
+      },
+    });
   };
 
   return (
     <>
-      <div className="row">
-        <h1 className="text-center">キャンプ場の編集</h1>
-        <div className="offset-md-2 col-md-8">
-          <form className={validated ? "was-validated" : ""} onSubmit={handleSubmit} noValidate>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="title">
-                タイトル
-              </label>
-              <input
-                className="form-control"
-                type="text"
+      <Typography variant="h4" component="h1" align="center" sx={{ mb: 3 }}>
+        キャンプ場の編集
+      </Typography>
+      <Grid container>
+        <Grid item sm={1} md={2}></Grid>
+        <Grid item xs={12} sm={10} md={8}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            sx={{ display: "flex", flexDirection: "column", gap: 3, mb: 5 }}>
+            <Box>
+              <TextField
+                label="タイトル"
+                variant="outlined"
+                fullWidth
                 name="title"
-                id="title"
-                value={formValues.title}
-                onChange={handleForm}
-                required
+                error={errors.title}
+                helperText={errors.title?.message}
+                {...register("title", {
+                  required: "タイトルは必須です",
+                  maxLength: { value: 50, message: "タイトルは50文字以内で入力してください" },
+                })}
+                InputLabelProps={{ shrink: true }}
               />
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="location">
-                場所
-              </label>
-              <input
-                className="form-control"
-                type="text"
+            </Box>
+            <Box>
+              <TextField
+                label="場所"
+                variant="outlined"
+                fullWidth
                 name="location"
-                id="location"
-                value={formValues.location}
-                onChange={handleForm}
-                required
+                error={errors.location}
+                helperText={errors.location?.message}
+                {...register("location", {
+                  required: "場所は必須です",
+                })}
+                InputLabelProps={{ shrink: true }}
               />
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="price">
-                価格
-              </label>
-              <div className="input-group">
-                <span className="input-group-text" id="price-label">
-                  &yen;
-                </span>
-                <input
+            </Box>
+            <Box>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="price">価格</InputLabel>
+                <OutlinedInput
                   type="number"
-                  className="form-control"
                   id="price"
+                  label="価格"
                   placeholder="0"
-                  aria-label="価格"
-                  aria-describedby="price-label"
                   name="price"
-                  value={formValues.price}
-                  onChange={handleForm}
-                  required
+                  startAdornment={
+                    <InputAdornment position="start" sx={{ ml: 1, mr: 2 }}>
+                      &yen;
+                    </InputAdornment>
+                  }
+                  error={errors.price}
+                  {...register("price", {
+                    required: "価格は必須です",
+                    min: { value: 0, message: "価格は0以上の数値で入力してください" },
+                  })}
                 />
-              </div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="description">
-                説明
-              </label>
-              <textarea
-                className="form-control"
+                <FormHelperText error={errors.price}>{errors.price?.message}</FormHelperText>
+              </FormControl>
+            </Box>
+            <Box>
+              <TextField
+                multiline
+                label="説明"
+                variant="outlined"
+                fullWidth
                 name="description"
-                id="description"
-                value={formValues.description}
-                onChange={handleForm}
-                required></textarea>
-            </div>
+                rows={4}
+                error={errors.description}
+                helperText={errors.description?.message}
+                {...register("description", {
+                  required: "説明は必須です",
+                })}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Box>
             {/* image要素 * 3作成 */}
             {[...Array(3)].map((_, i) => {
               const idx = i + 1;
               return (
-                <div className="mb-3" key={idx}>
-                  <label className="form-label" htmlFor={`newImage${idx}`}>
-                    画像{idx}
-                  </label>
-                  {data[`image${idx}`] && (
-                    <>
-                      <label className="ms-2">現在:</label>
-                      <a className="mx-1" href={formValues[`image${idx}`]}>
-                        {formValues[`image${idx}`]?.match(/[\w-]+.\w+$/)}
-                      </a>
-                      {idx !== 1 && (
+                <Box key={idx}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor={`new${idx}`} shrink>
+                      画像{idx}
+                    </InputLabel>
+                    <OutlinedInput
+                      type="file"
+                      name={`new${idx}`}
+                      id={`new${idx}`}
+                      label={`画像${idx}`}
+                      inputProps={{ accept: "image/*" }}
+                      notched
+                      onChange={handleImage}
+                    />
+                    <FormHelperText>
+                      現在:
+                      <Typography component="a" sx={{ ml: 1 }} href={data[`image${idx}`]}>
+                        {data[`image${idx}`]?.match(/[\w-]+.\w+$/)}
+                      </Typography>
+                      {idx !== 1 && data[`image${idx}`] && (
                         <>
                           <input
                             type="checkbox"
                             name={`image${idx}`}
-                            id={`image${idx}`}
-                            className="ms-2"
+                            id={`image-clear${idx}`}
                             onChange={handleDeleteImage}
+                            style={{ marginLeft: "1rem", accentColor: "grey" }}
                           />
-                          <label htmlFor={`image${idx}`}>クリア</label>
+                          <Typography component="label" variant="body2" htmlFor={`image-clear${idx}`}>
+                            クリア
+                          </Typography>
                         </>
                       )}
-                    </>
-                  )}
-                  <input
-                    className="form-control"
-                    type="file"
-                    name={`newImage${idx}`}
-                    id={`newImage${idx}`}
-                    accept="image/*"
-                    onChange={handleImage}
-                  />
-                </div>
+                    </FormHelperText>
+                  </FormControl>
+                </Box>
               );
             })}
-
-            <div className="mb-3">
-              <button className="btn btn-success me-3">更新する</button>
-              <Link to={`/campgrounds/${id}`}>キャンセル</Link>
-            </div>
-          </form>
-        </div>
-      </div>
+            <Box>
+              <Button type="submit" variant="contained" color="success" sx={{ mr: 3 }}>
+                更新する
+              </Button>
+              <Button component={Link} color="error" to={`/campgrounds/${id}`}>
+                キャンセル
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
     </>
   );
 };
