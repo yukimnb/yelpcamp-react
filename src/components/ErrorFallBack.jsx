@@ -1,6 +1,7 @@
 import errorImage from "../assets/img/error.png";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 export const ErrorFallBack = ({ error, resetErrorBoundary }) => {
   const navigate = useNavigate();
@@ -12,21 +13,33 @@ export const ErrorFallBack = ({ error, resetErrorBoundary }) => {
   };
 
   return (
-    <div className="text-center">
-      <img src={errorImage} alt="error" />
-      <h1 className="mb-5">以下のエラーが発生してしまいました。</h1>
-      <p>
-        <b>
-          {error.name}: {error.message}
-        </b>
-      </p>
-      <hr />
+    <Container
+      fixed
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        gap: 2,
+      }}>
+      <Box component="img" src={errorImage} alt="error" sx={{ width: "60%" }} />
 
-      <p>エラーハンドリングの考慮不足のためお手数ですが、戻るボタンをクリックしてください。</p>
-      <button className="mb-5" onClick={handleBack}>
+      <Typography variant="h5" component="h1">
+        以下のエラーが発生してしまいました。
+      </Typography>
+      <Typography variant="h6" component="h2" sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+        {error.name}: {error.message}
+      </Typography>
+
+      <Typography variant="body1">
+        エラーハンドリングの考慮不足のためお手数ですが、戻るボタンをクリックしてください。
+      </Typography>
+      <Button sx={{ mb: 5 }} variant="contained" onClick={handleBack}>
         TOPへ戻る
-      </button>
-    </div>
+      </Button>
+    </Container>
   );
 };
 

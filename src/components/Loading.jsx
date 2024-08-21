@@ -1,9 +1,29 @@
+import { Box, CircularProgress, Typography } from "@mui/material";
+
 export const Loading = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="spinner-border" role="status" style={{ width: "3rem", height: "3rem" }}>
-        <span className="visually-hidden">Loading...</span>
-      </div>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}>
+      <CircularProgress color="grey" size="4rem" />
+      <Typography
+        component="span"
+        style={{
+          position: "absolute",
+          width: 1,
+          height: 1,
+          margin: -1,
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          border: 0,
+          padding: 0,
+        }}>
+        Loading...
+      </Typography>
+    </Box>
   );
 };
