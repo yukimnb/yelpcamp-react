@@ -128,7 +128,7 @@ export const NavBar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar sx={{ bgcolor: (theme) => theme.palette.success.light }}>
+              <Avatar sx={{ bgcolor: (theme) => theme.palette.info.light }}>
                 {user.key && user.name.toLocaleUpperCase().at(0)}
               </Avatar>
             </IconButton>
@@ -148,7 +148,7 @@ export const NavBar = () => {
               onClose={handleCloseUserMenu}>
               {user.key ? (
                 <MenuItem onClick={handleLogout}>
-                  <Typography textAlign="center">Logout</Typography>
+                  <Typography textAlign="center">ログアウト</Typography>
                 </MenuItem>
               ) : (
                 settings.map((setting) => (
