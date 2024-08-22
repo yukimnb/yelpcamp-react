@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { createReview } from "../apis/review-api";
@@ -12,8 +13,15 @@ export const CreateReviewPage = () => {
   const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
   const { id } = useParams();
-
   const createMutation = useMutation(createReview);
+
+  useEffect(() => {
+    if (!user.key) {
+      toast.warning("レビューにはログインが必要です");
+      navigate("/campgrounds/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultValues = {
     campground: id,

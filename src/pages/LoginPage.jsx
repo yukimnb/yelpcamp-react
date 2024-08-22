@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { userLogin } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
@@ -86,6 +86,12 @@ export const LoginPage = () => {
               <Button type="submit" variant="contained" color="success" sx={{ mt: 1 }}>
                 ログイン
               </Button>
+              <Typography variant="body2" textAlign="center">
+                アカウントをお持ちでない方は
+                <Typography variant="body2" component={Link} to={"/campgrounds/signup"}>
+                  こちら
+                </Typography>
+              </Typography>
             </CardContent>
           </Card>
         </Box>

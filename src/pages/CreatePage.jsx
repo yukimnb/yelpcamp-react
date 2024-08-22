@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, Link } from "react-router-dom";
 import { createCampground } from "../apis/campground-api";
@@ -23,6 +24,14 @@ export const CreatePage = () => {
   const navigate = useNavigate();
   const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
+
+  useEffect(() => {
+    if (!user.key) {
+      toast.warning("キャンプ場作成にはログインが必要です");
+      navigate("/campgrounds/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultValues = {
     title: "",

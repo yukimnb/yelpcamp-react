@@ -135,38 +135,37 @@ export const DetailPage = () => {
                 <Divider />
               </List>
             </CardContent>
-            {user.key && (
-              <CardActions>
-                {user.name === data.author_name && (
-                  <>
-                    <Button
-                      component={Link}
-                      to={`/campgrounds/${data.id}/edit`}
-                      variant="contained"
-                      color="info"
-                      sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
-                      state={data}>
-                      {isSm ? "編集" : "編集する"}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleDelete}
-                      sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
-                      {isSm ? "削除" : "削除する"}
-                    </Button>
-                  </>
-                )}
-                <Button
-                  component={Link}
-                  to={`/campgrounds/${data.id}/createreview`}
-                  variant="contained"
-                  color="success"
-                  sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
-                  レビューを作成
-                </Button>
-              </CardActions>
-            )}
+
+            <CardActions>
+              <Button
+                component={Link}
+                to={`/campgrounds/${data.id}/createreview`}
+                variant="contained"
+                color="success"
+                sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+                レビューを作成
+              </Button>
+              {user.name === data.author_name && (
+                <>
+                  <Button
+                    component={Link}
+                    to={`/campgrounds/${data.id}/edit`}
+                    variant="contained"
+                    color="info"
+                    sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
+                    state={data}>
+                    {isSm ? "編集" : "編集する"}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDelete}
+                    sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+                    {isSm ? "削除" : "削除する"}
+                  </Button>
+                </>
+              )}
+            </CardActions>
           </Card>
         </Grid>
         <Grid item xs={12} md={5}>
