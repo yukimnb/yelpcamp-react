@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { getCampgroundsList } from "../apis/campground-api";
 import { Link } from "react-router-dom";
@@ -10,37 +10,42 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 export const ListPage = () => {
   const [desc, setDesc] = useState(false);
+  const [data, setData] = useState([]);
   const { showBoundary } = useErrorBoundary();
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { data, isSuccess } = useQuery("list", getCampgroundsList, {
-    onSuccess: (data) => {
-      data.map((object) => {
-        object.properties = { title: object.title };
-        return object;
-      });
-      return data;
-    },
+  const { data: fetchedData } = useQuery("list", getCampgroundsList, {
     onError: (error) => {
       showBoundary(error);
     },
   });
 
+  useEffect(() => {
+    if (fetchedData) {
+      const updatedData = fetchedData.map((object) => ({
+        ...object,
+        properties: { title: object.title },
+      }));
+      setData(updatedData);
+    }
+  }, [fetchedData]);
+
   const handleSort = () => {
-    data.sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       if (desc) {
         return a.id - b.id;
       } else {
         return b.id - a.id;
       }
     });
+    setData(sortedData);
     setDesc((prev) => !prev);
   };
 
   return (
     <>
-      <ClusterMap newData={data} />
+      <ClusterMap newData={fetchedData} />
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 4, mb: 1 }}>
         <Typography variant={isSm ? "h6" : "h5"} component="h1">
           キャンプ場一覧
@@ -53,44 +58,43 @@ export const ListPage = () => {
         </Button>
       </Box>
 
-      {isSuccess &&
-        data.map((object) => (
-          <Card
-            variant="outlined"
+      {data.map((object) => (
+        <Card
+          variant="outlined"
+          sx={{
+            display: "flex",
+            mb: 3,
+            height: { md: 200 },
+            flexDirection: { xs: "column", md: "row" },
+          }}
+          key={object.id}>
+          <CardMedia component="img" image={object.image1} alt={object.title} sx={{ width: { md: 300 } }} />
+          <CardContent
             sx={{
               display: "flex",
-              mb: 3,
-              height: { md: 200 },
-              flexDirection: { xs: "column", md: "row" },
-            }}
-            key={object.title}>
-            <CardMedia component="img" image={object.image1} alt={object.title} sx={{ width: { md: 300 } }} />
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                gap: { xs: 1, md: 0 },
-              }}>
-              <Typography variant="h5" component="h2">
-                {object.title}
-              </Typography>
-              <Typography variant="body1">
-                {object.description.length > 30 ? `${object.description.slice(0, 30)}...` : object.description}
-              </Typography>
-              <Typography variant="subtitle2" color="text.secondary">
-                {object.location}
-              </Typography>
-              <Button
-                variant="contained"
-                component={Link}
-                to={`/campgrounds/${object.id}`}
-                sx={{ alignSelf: { md: "flex-start" } }}>
-                {object.title}の詳細
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+              flexDirection: "column",
+              justifyContent: "space-between",
+              gap: { xs: 1, md: 0 },
+            }}>
+            <Typography variant="h5" component="h2">
+              {object.title}
+            </Typography>
+            <Typography variant="body1">
+              {object.description.length > 30 ? `${object.description.slice(0, 30)}...` : object.description}
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              {object.location}
+            </Typography>
+            <Button
+              variant="contained"
+              component={Link}
+              to={`/campgrounds/${object.id}`}
+              sx={{ alignSelf: { md: "flex-start" } }}>
+              {object.title}の詳細
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
     </>
   );
 };

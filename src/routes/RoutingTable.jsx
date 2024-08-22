@@ -17,13 +17,13 @@ export const RoutingTable = createBrowserRouter(
       <Route path="/" element={<Frame />}>
         <Route index element={<IndexPage />} />
         <Route path="campgrounds" element={<MainPage />}>
-          <Route path="" element={<ListPage />} />
           <Route path="create" element={<CreatePage />} />
-          <Route path=":id" element={<DetailPage />} />
           <Route path=":id/edit" element={<EditPage />} />
           <Route path=":id/createreview" element={<CreateReviewPage />} />
+          <Route path=":id" element={<DetailPage />} />
           <Route path="signup" element={<SignUpPage />} />
           <Route path="login" element={<LoginPage />} />
+          <Route index element={<ListPage />} />
         </Route>
       </Route>
     </>
