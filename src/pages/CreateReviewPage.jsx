@@ -65,9 +65,7 @@ export const CreateReviewPage = () => {
                   name="rating"
                   control={control}
                   defaultValue={5}
-                  render={({ field }) => (
-                    <Rating {...field} size="large" error={errors.rating} value={Number(field.value)} />
-                  )}
+                  render={({ field }) => <Rating {...field} size="large" value={Number(field.value)} />}
                 />
               </Box>
 
@@ -79,7 +77,7 @@ export const CreateReviewPage = () => {
                   label="コメント"
                   variant="outlined"
                   fullWidth
-                  error={errors.comment}
+                  error={!!errors.comment}
                   helperText={errors.comment?.message}
                   {...register("comment", {
                     required: "コメントは必須です",

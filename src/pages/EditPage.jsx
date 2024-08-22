@@ -109,7 +109,7 @@ export const EditPage = () => {
                 variant="outlined"
                 fullWidth
                 name="title"
-                error={errors.title}
+                error={!!errors.title}
                 helperText={errors.title?.message}
                 {...register("title", {
                   required: "タイトルは必須です",
@@ -124,7 +124,7 @@ export const EditPage = () => {
                 variant="outlined"
                 fullWidth
                 name="location"
-                error={errors.location}
+                error={!!errors.location}
                 helperText={errors.location?.message}
                 {...register("location", {
                   required: "場所は必須です",
@@ -146,13 +146,13 @@ export const EditPage = () => {
                       &yen;
                     </InputAdornment>
                   }
-                  error={errors.price}
+                  error={!!errors.price}
                   {...register("price", {
                     required: "価格は必須です",
                     min: { value: 0, message: "価格は0以上の数値で入力してください" },
                   })}
                 />
-                <FormHelperText error={errors.price}>{errors.price?.message}</FormHelperText>
+                <FormHelperText error={!!errors.price}>{errors.price?.message}</FormHelperText>
               </FormControl>
             </Box>
             <Box>
@@ -163,7 +163,7 @@ export const EditPage = () => {
                 fullWidth
                 name="description"
                 rows={4}
-                error={errors.description}
+                error={!!errors.description}
                 helperText={errors.description?.message}
                 {...register("description", {
                   required: "説明は必須です",

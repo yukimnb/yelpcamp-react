@@ -69,7 +69,7 @@ export const SignUpPage = () => {
                   label="メールアドレス"
                   variant="outlined"
                   fullWidth
-                  error={errors.email}
+                  error={!!errors.email}
                   helperText={errors.email?.message}
                   {...register("email", {
                     required: "メールアドレスは必須です",
@@ -88,7 +88,7 @@ export const SignUpPage = () => {
                   label="パスワード"
                   variant="outlined"
                   fullWidth
-                  error={errors.password}
+                  error={!!errors.password}
                   helperText={errors.password?.message}
                   {...register("password", {
                     required: "パスワードは必須です",

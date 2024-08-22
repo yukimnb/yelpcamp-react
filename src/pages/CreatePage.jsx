@@ -100,7 +100,7 @@ export const CreatePage = () => {
                 variant="outlined"
                 fullWidth
                 name="title"
-                error={errors.title}
+                error={!!errors.title}
                 helperText={errors.title?.message}
                 {...register("title", {
                   required: "タイトルは必須です",
@@ -115,7 +115,7 @@ export const CreatePage = () => {
                 variant="outlined"
                 fullWidth
                 name="location"
-                error={errors.location}
+                error={!!errors.location}
                 helperText={errors.location?.message}
                 {...register("location", {
                   required: "場所は必須です",
@@ -137,13 +137,13 @@ export const CreatePage = () => {
                       &yen;
                     </InputAdornment>
                   }
-                  error={errors.price}
+                  error={!!errors.price}
                   {...register("price", {
                     required: "価格は必須です",
                     min: { value: 0, message: "価格は0以上の数値で入力してください" },
                   })}
                 />
-                <FormHelperText error={errors.price}>{errors.price?.message}</FormHelperText>
+                <FormHelperText error={!!errors.price}>{errors.price?.message}</FormHelperText>
               </FormControl>
             </Box>
             <Box>
@@ -154,7 +154,7 @@ export const CreatePage = () => {
                 fullWidth
                 name="description"
                 rows={4}
-                error={errors.description}
+                error={!!errors.description}
                 helperText={errors.description?.message}
                 {...register("description", {
                   required: "説明は必須です",
@@ -178,12 +178,12 @@ export const CreatePage = () => {
                       label={`画像${idx}`}
                       inputProps={{ accept: "image/*" }}
                       notched
-                      error={errors[`image${idx}`]}
+                      error={!!errors[`image${idx}`]}
                       {...register(`image${idx}`, {
                         required: idx === 1 ? "キャンプ場の登録には1枚以上の画像が必要です" : false,
                       })}
                     />
-                    <FormHelperText error={errors[`image${idx}`]}>{errors[`image${idx}`]?.message}</FormHelperText>
+                    <FormHelperText error={!!errors[`image${idx}`]}>{errors[`image${idx}`]?.message}</FormHelperText>
                   </FormControl>
                 </Box>
               );
