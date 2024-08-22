@@ -105,7 +105,7 @@ export const ClusterMap = ({ newData }) => {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
 
-          new mapboxgl.Popup().setLngLat(coordinates).setHTML(`<a href=/campgrounds/${id}>${title}</a>`).addTo(map);
+          new mapboxgl.Popup().setLngLat(coordinates).setHTML(`<a href="/campgrounds/${id}">${title}</a>`).addTo(map);
         });
 
         map.on("mouseenter", "clusters", () => {

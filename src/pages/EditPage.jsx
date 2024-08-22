@@ -191,7 +191,7 @@ export const EditPage = () => {
                     />
                     <FormHelperText>
                       現在:
-                      <Typography component="a" sx={{ ml: 1 }} href={data[`image${idx}`]}>
+                      <Typography component="a" sx={{ ml: 1, textDecoration: "none" }} href={data[`image${idx}`]}>
                         {data[`image${idx}`]?.match(/[\w-]+.\w+$/)}
                       </Typography>
                       {idx !== 1 && data[`image${idx}`] && (
