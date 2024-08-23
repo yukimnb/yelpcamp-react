@@ -28,7 +28,7 @@ export const Map = ({ geometry, location }) => {
       };
     }
   }, [geometry, location]);
-  return <Box sx={{ width: "100%", height: "300px", mb: 2 }} ref={mapContainerRef} />;
+  return <Box sx={{ width: "100%", height: "200px", mb: 2 }} ref={mapContainerRef} />;
 };
 
 Map.propTypes = {
