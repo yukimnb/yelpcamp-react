@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { userLogout } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
-import { useErrorBoundary } from "react-error-boundary";
 import { useMutation } from "react-query";
 import indexImage from "../assets/img/index.jpg";
 import { Button, Box, Typography } from "@mui/material";
@@ -13,7 +12,6 @@ export const IndexPage = () => {
   const [user, setUser] = useUser();
   const navigate = useNavigate();
   const logoutMutation = useMutation(userLogout);
-  const { showBoundary } = useErrorBoundary();
 
   const handleLogout = () => {
     logoutMutation.mutate(null, {
@@ -25,7 +23,7 @@ export const IndexPage = () => {
         navigate("/");
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };

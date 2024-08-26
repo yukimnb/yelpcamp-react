@@ -3,14 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { userLogin } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
-import { useErrorBoundary } from "react-error-boundary";
 import { Box, Card, CardContent, Grid, Typography, Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 export const LoginPage = () => {
   const [, setUser] = useUser();
   const navigate = useNavigate();
-  const { showBoundary } = useErrorBoundary();
   const loginMutation = useMutation(userLogin);
 
   const defaultValues = {
@@ -32,7 +30,7 @@ export const LoginPage = () => {
         navigate("/campgrounds");
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };

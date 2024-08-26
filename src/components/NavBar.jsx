@@ -4,7 +4,6 @@ import { useMutation } from "react-query";
 import { userLogout } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "./ContextProvider";
-import { useErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,7 +18,6 @@ export const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [user, setUser] = useUser();
   const navigate = useNavigate();
-  const { showBoundary } = useErrorBoundary();
   const logoutMutation = useMutation(userLogout);
 
   const handleOpenNavMenu = (event) => {
@@ -47,7 +45,7 @@ export const NavBar = () => {
         navigate("/");
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };
