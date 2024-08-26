@@ -4,7 +4,6 @@ import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { updateCampground } from "../apis/campground-api";
 import { getForwardGeocoding } from "../apis/mapbox-api";
 import { toast } from "react-toastify";
-import { useErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import {
   Grid,
@@ -22,10 +21,9 @@ import {
 export const EditPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { showBoundary } = useErrorBoundary();
+
   const getGeocodeMutation = useMutation(getForwardGeocoding);
   const updateMutation = useMutation(updateCampground);
-
   const { state: data } = useLocation();
 
   const [newImages, setNewImages] = useState({
@@ -80,12 +78,12 @@ export const EditPage = () => {
             navigate(`/campgrounds/${id}`);
           },
           onError: (error) => {
-            showBoundary(error);
+            toast.error(error.message);
           },
         });
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };

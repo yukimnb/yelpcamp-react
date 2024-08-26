@@ -65,7 +65,7 @@ export const DetailPage = () => {
         navigate("/campgrounds");
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };
@@ -77,7 +77,7 @@ export const DetailPage = () => {
         navigate(0);
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };

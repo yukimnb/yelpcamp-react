@@ -4,13 +4,11 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { createReview } from "../apis/review-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
-import { useErrorBoundary } from "react-error-boundary";
 import { Box, Card, CardContent, Grid, Typography, Button, TextField, Rating } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 
 export const CreateReviewPage = () => {
   const navigate = useNavigate();
-  const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
   const { id } = useParams();
   const createMutation = useMutation(createReview);
@@ -42,7 +40,7 @@ export const CreateReviewPage = () => {
         navigate(`/campgrounds/${id}`);
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };

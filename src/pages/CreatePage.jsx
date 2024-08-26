@@ -5,7 +5,6 @@ import { createCampground } from "../apis/campground-api";
 import { getForwardGeocoding } from "../apis/mapbox-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
-import { useErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
 import {
   Grid,
@@ -22,7 +21,6 @@ import {
 
 export const CreatePage = () => {
   const navigate = useNavigate();
-  const { showBoundary } = useErrorBoundary();
   const [user] = useUser();
 
   useEffect(() => {
@@ -71,12 +69,12 @@ export const CreatePage = () => {
             navigate("/campgrounds");
           },
           onError: (error) => {
-            showBoundary(error);
+            toast.error(error.message);
           },
         });
       },
       onError: (error) => {
-        showBoundary(error);
+        toast.error(error.message);
       },
     });
   };
