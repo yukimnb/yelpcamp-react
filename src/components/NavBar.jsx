@@ -5,7 +5,19 @@ import { userLogout } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "./ContextProvider";
 import { styled } from "@mui/material/styles";
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, MenuItem } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Button,
+  MenuItem,
+  useTheme,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const settings = [
@@ -19,6 +31,7 @@ export const NavBar = () => {
   const [user, setUser] = useUser();
   const navigate = useNavigate();
   const logoutMutation = useMutation(userLogout);
+  const theme = useTheme();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -62,7 +75,7 @@ export const NavBar = () => {
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontWeight: (theme) => theme.typography.fontWeightBold,
+              fontWeight: theme.typography.fontWeightBold,
               letterSpacing: ".1rem",
               color: "inherit",
               textDecoration: "none",
@@ -116,7 +129,7 @@ export const NavBar = () => {
             sx={{
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontWeight: (theme) => theme.typography.fontWeightBold,
+              fontWeight: theme.typography.fontWeightBold,
               letterSpacing: ".1rem",
               color: "inherit",
               textDecoration: "none",
@@ -126,7 +139,7 @@ export const NavBar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar sx={{ bgcolor: (theme) => theme.palette.info.light }}>
+              <Avatar sx={{ bgcolor: theme.palette.info.light }}>
                 {user.key && user.name.toLocaleUpperCase().at(0)}
               </Avatar>
             </IconButton>

@@ -4,12 +4,13 @@ import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
 import { useMutation } from "react-query";
 import indexImage from "../assets/img/index.jpg";
-import { Button, Box, Typography } from "@mui/material";
+import { Button, Box, Typography, useTheme } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import HikingIcon from "@mui/icons-material/Hiking";
 
 export const IndexPage = () => {
   const [user, setUser] = useUser();
+  const theme = useTheme();
   const navigate = useNavigate();
   const logoutMutation = useMutation(userLogout);
 
@@ -49,7 +50,7 @@ export const IndexPage = () => {
               sx={{
                 float: { xs: "none", sm: "left" },
                 mb: { xs: 3, sm: 0 },
-                fontWeight: (theme) => theme.typography.fontWeightBold,
+                fontWeight: theme.typography.fontWeightBold,
               }}>
               YelpCamp
             </Typography>
@@ -85,7 +86,7 @@ export const IndexPage = () => {
               size="large"
               endIcon={<HikingIcon />}
               sx={{
-                fontWeight: (theme) => theme.typography.fontWeightBold,
+                fontWeight: theme.typography.fontWeightBold,
                 borderColor: "white",
                 backgroundColor: "white",
                 color: "#333",

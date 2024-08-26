@@ -74,7 +74,9 @@ export const DetailPage = () => {
     deleteReviewMutation.mutate(reviewId, {
       onSuccess: () => {
         toast.success("レビューを削除しました");
-        navigate(0);
+        setTimeout(() => {
+          navigate(0);
+        }, 1000);
       },
       onError: (error) => {
         toast.error(error.message);
@@ -153,7 +155,7 @@ export const DetailPage = () => {
               to={`/campgrounds/${data.id}/createreview`}
               variant="contained"
               color="success"
-              sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+              sx={{ fontWeight: theme.typography.fontWeightBold }}>
               レビューを作成
             </Button>
             {user.name === data.author_name && (
@@ -163,7 +165,7 @@ export const DetailPage = () => {
                   to={`/campgrounds/${data.id}/edit`}
                   variant="contained"
                   color="info"
-                  sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
+                  sx={{ fontWeight: theme.typography.fontWeightBold }}
                   state={data}>
                   {isSm ? "編集" : "編集する"}
                 </Button>
@@ -171,7 +173,7 @@ export const DetailPage = () => {
                   variant="contained"
                   color="error"
                   onClick={handleDelete}
-                  sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+                  sx={{ fontWeight: theme.typography.fontWeightBold }}>
                   {isSm ? "削除" : "削除する"}
                 </Button>
               </>
@@ -182,12 +184,13 @@ export const DetailPage = () => {
 
       {reviews.length > 0 && (
         <>
-          <Typography
-            variant="h5"
-            component="h2"
-            sx={{ ml: 2, mb: 1, fontWeight: (theme) => theme.typography.fontWeightBold }}>
+          <Typography variant="h5" component="h2" sx={{ ml: 2, mb: 1, fontWeight: theme.typography.fontWeightBold }}>
             レビュー
+            <Typography component="span" variant="h5" sx={{ ml: 1, fontWeight: theme.typography.fontWeightBold }}>
+              ({reviews.length}件)
+            </Typography>
           </Typography>
+
           {reviews
             .sort((a, b) => b.id - a.id)
             .map((object) => (
@@ -216,7 +219,7 @@ export const DetailPage = () => {
                       variant="contained"
                       color="error"
                       size="small"
-                      sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}
+                      sx={{ fontWeight: theme.typography.fontWeightBold }}
                       onClick={() => handleDeleteReview(object.id)}>
                       削除する
                     </Button>

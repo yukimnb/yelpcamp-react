@@ -45,14 +45,17 @@ export const ListPage = () => {
 
   return (
     <>
-      <ClusterMap newData={fetchedData} />
+      <ClusterMap newData={data} />
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 4, mb: 1 }}>
         <Typography variant={isSm ? "h6" : "h5"} component="h1">
           キャンプ場一覧
+          <Typography component="span" variant={isSm ? "h6" : "h5"} sx={{ ml: 1 }}>
+            ({data.length}件)
+          </Typography>
         </Typography>
-        <Button variant="outlined" color="error" onClick={handleSort}>
+        <Button variant="outlined" color="error" onClick={handleSort} size={isSm ? "small" : "medium"}>
           <SwapVertIcon sx={{ mr: 1 }} />
-          <Typography sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+          <Typography sx={{ fontWeight: theme.typography.fontWeightBold }}>
             {isSm ? (desc ? "古い順" : "新しい順") : desc ? "古い順に並び替え" : "新しい順に並び替え"}
           </Typography>
         </Button>

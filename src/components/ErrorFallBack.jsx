@@ -1,9 +1,10 @@
 import errorImage from "../assets/img/error.png";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography, useTheme } from "@mui/material";
 
 export const ErrorFallBack = ({ error, resetErrorBoundary }) => {
+  const theme = useTheme();
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -29,7 +30,7 @@ export const ErrorFallBack = ({ error, resetErrorBoundary }) => {
       <Typography variant="h5" component="h1">
         以下のエラーが発生してしまいました。
       </Typography>
-      <Typography variant="h6" component="h2" sx={{ fontWeight: (theme) => theme.typography.fontWeightBold }}>
+      <Typography variant="h6" component="h2" sx={{ fontWeight: theme.typography.fontWeightBold }}>
         {error.name}: {error.message}
       </Typography>
 

@@ -122,7 +122,7 @@ export const ClusterMap = ({ newData }) => {
       };
     }
   }, [newData]);
-  return <Box sx={{ width: "100%", height: "500px" }} ref={mapContainerRef} />;
+  return <Box sx={{ width: "100%", height: { xs: "300px", sm: "500px" } }} ref={mapContainerRef} />;
 };
 
 ClusterMap.propTypes = {

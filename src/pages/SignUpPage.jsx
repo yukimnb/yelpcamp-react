@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { userSignUp, userLogin } from "../apis/user-api";
 import { toast } from "react-toastify";
 import { useUser } from "../components/ContextProvider";
-import { Box, Card, CardContent, Grid, Typography, Button, TextField } from "@mui/material";
+import { Box, Card, CardContent, Grid, Typography, Button, TextField, FormHelperText } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 export const SignUpPage = () => {
@@ -78,6 +78,7 @@ export const SignUpPage = () => {
                   })}
                   InputLabelProps={{ shrink: true }}
                 />
+                <FormHelperText>※ ローカルパートがユーザー名として登録されます</FormHelperText>
               </Box>
               <Box>
                 <TextField
