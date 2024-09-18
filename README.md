@@ -42,3 +42,11 @@
 - [ポートフォリオサイト](https://yelpcamp-react.vercel.app/)（ユーザー作成や投稿等自由に触って頂いて大丈夫です。）
 
 - [バックエンドのソース](https://github.com/yukimnb/yelpcamp-django)
+
+# 残対応
+1. TS化
+2. 無限スクロール
+3. 検索機能
+4. カテゴリ検索
+5. TOP画面の導線を無くす
+6. バックエンドのテストをpytestで置き換えて、カバレッジを上げる
